@@ -78,12 +78,8 @@ WSGI_APPLICATION = 'banquebackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':  'de6snfencdss6r',
-        'USER': 'ookuvsqwkouqzm',
-        'PASSWORD': '',
-        'HOST': 'ec2-23-21-129-50.compute-1.amazonaws.com',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -126,3 +122,8 @@ STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
 DATABASES['default'] = dj_database_url.config()
+
+try:
+    from banquebackend.local_settings import *
+except ImportError:
+    pass
