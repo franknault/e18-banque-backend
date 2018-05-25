@@ -105,4 +105,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# Custom ignore
 /db.cnf
+setting_db.py
+.idea/
