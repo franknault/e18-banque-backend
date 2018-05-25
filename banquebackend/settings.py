@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import django_heroku
-from setting_db import *
+# from setting_db import *
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'banquebackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':  DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+        'NAME':  'de6snfencdss6r',
+        'USER': 'ookuvsqwkouqzm',
+        'PASSWORD': 'b6cad2cecfc29f75484d6b1cc590c0d34d50bd999bb0790d08e17fe3d38e6de7',
+        'HOST': 'ec2-23-21-129-50.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
