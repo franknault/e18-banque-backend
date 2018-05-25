@@ -107,5 +107,5 @@ venv.bak/
 
 # Custom ignore
 /db.cnf
-setting_db.py
+local_settings.py
 .idea/

@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import django_heroku
-# from setting_db import *
+import dj_database_url
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -81,11 +81,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME':  'de6snfencdss6r',
         'USER': 'ookuvsqwkouqzm',
-        'PASSWORD': 'b6cad2cecfc29f75484d6b1cc590c0d34d50bd999bb0790d08e17fe3d38e6de7',
+        'PASSWORD': '',
         'HOST': 'ec2-23-21-129-50.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -124,3 +125,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
+DATABASES['default'] = dj_database_url.config()
