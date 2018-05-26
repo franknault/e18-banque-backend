@@ -126,4 +126,7 @@ DATABASES['default'] = dj_database_url.config()
 try:
     from banquebackend.local_settings import *
 except ImportError:
-    pass
+    raise ImportError(
+        "Erreur lors de l'importation du fichier \"local_settings.py\", assurez-vous d\'avoir le fichier avec les "
+        "paramètres de connexion avec votre BD."
+    )
