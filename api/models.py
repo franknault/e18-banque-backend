@@ -70,10 +70,16 @@ class Compte(models.Model):
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
 
+    class Meta:
+        db_table = 'compte'
+
 
 class Courant(Compte):
     pk_courant = models.AutoField(primary_key=True)
     fk_client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'courant'
 
 
 class CarteCredit(models.Model):
@@ -85,6 +91,9 @@ class CarteCredit(models.Model):
     cvv = models.CharField(max_length=512)
     date_emission = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'cartecredit'
+
 
 class Credit(Compte):
     pk_credit = models.AutoField(primary_key=True)
@@ -92,13 +101,28 @@ class Credit(Compte):
     fk_carte_credit = models.ForeignKey(CarteCredit, on_delete=models.CASCADE)
     limite = models.DecimalField(max_digits=10, decimal_places=2)
 
+    class Meta:
+        db_table = 'credit'
+
 
 class TypeTransaction(models.Model):
     pk_type_transaction_id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=50)
+    description = models.TextField()
+
+    class Meta:
+        db_table = 'type_transaction'
 
 
 class Transaction(models.Model):
+    ACCEPTE = 'ACC'
+    REFUSE = 'REF'
+    GELE = 'GEL'
+    ETAT_CHOICES = (
+        (ACCEPTE, 'Acceptée'),
+        (REFUSE, 'Refusée'),
+        (GELE, 'Gelée'),
+    )
     pk_transaction = models.AutoField(primary_key=True)
     fk_type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.DO_NOTHING)
     fk_compte = models.ForeignKey(Compte, on_delete=models.DO_NOTHING)
@@ -108,4 +132,7 @@ class Transaction(models.Model):
     montant = models.DecimalField(max_digits=10, decimal_places=2)
     solde_avant = models.DecimalField(max_digits=10, decimal_places=2)
     solde_apres = models.DecimalField(max_digits=10, decimal_places=2)
-    etat = models.CharField(max_length=3)
+    etat = models.CharField(max_length=3, choices=ETAT_CHOICES)
+
+    class Meta:
+        db_table = 'transaction'
