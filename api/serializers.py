@@ -7,3 +7,15 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
+
+
+class ClientEntreprise(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('pk_client', 'courriel', 'telephone', 'nom_entreprise', 'numero_entreprise')
+
+
+class ClientParticulier(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('pk_client', 'courriel', 'telephone', 'nom_particulier', 'prenom_particulier',  'sexe')
