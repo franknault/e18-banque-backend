@@ -6,34 +6,35 @@ from faker import Faker
 
 fake = Faker()
 
+
 @receiver(post_save, sender=Courant)
 def update_num_compte_courant(sender, instance, **kwargs):
     prefix = 'NRB'
-    num = prefix + format(instance.pk_compte, '05')
-    Compte.objects.filter(pk_compte=instance.pk_compte).update(num_compte=num)
+    num = prefix + format(instance.id, '05')
+    Compte.objects.filter(id=instance.id).update(num_compte=num)
 
 
 @receiver(post_save, sender=Credit)
 def update_num_compte_credit(sender, instance, **kwargs):
     prefix = 'NRB'
-    num = prefix + format(instance.pk_compte, '05')
-    Compte.objects.filter(pk_compte=instance.pk_compte).update(num_compte=num)
+    num = prefix + format(instance.id, '05')
+    Compte.objects.filter(id=instance.id).update(num_compte=num)
 
 
 @receiver(post_save, sender=Client)
 def generate_compte(sender, instance, **kwargs):
-    client = Client.objects.get(pk_client=instance.pk)
+    client = Client.objects.get(id=instance.id)
     create_courant(client)
     create_credit(client)
 
 
 def create_courant(client):
-    Courant.objects.create(solde=0.00, fk_client_id=client.pk)
+    Courant.objects.create(solde=0.00, client=client)
 
 
 def create_credit(client):
-    pk_card = create_credit_card(client)
-    Credit.objects.create(limite=1000.00, solde=0.00, fk_carte_credit_id=pk_card, fk_client_id=client.pk)
+    card = create_credit_card(client)
+    Credit.objects.create(limite=1000.00, solde=0.00, carte_credit=card, client=client)
 
 
 def create_credit_card(client):
@@ -46,5 +47,5 @@ def create_credit_card(client):
     card = CarteCredit.objects.create(nom_titulaire=client.full_name, annee_expiration=expire_year,
                                       mois_expiration=expire_month, cvv=security_code, num_carte=card_number)
 
-    return card.pk
+    return card
 
