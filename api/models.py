@@ -67,7 +67,7 @@ class Adresse(models.Model):
     @property
     def full_address(self):
         "Return the full address"
-        return '%s %s, %s, %s, %s' % (self.NoCivique, self.NomRue, self.CodePostal, self.Ville, self.Pays)
+        return '%s %s, %s, %s, %s' % (self.no_civique, self.nom_rue, self.code_postal, self.ville, self.pays)
 
     class Meta:
         db_table = 'adresse'
