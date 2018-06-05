@@ -12,10 +12,10 @@ class ClientSerializer(serializers.ModelSerializer):
 class ClientEntreprise(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('pk_client', 'courriel', 'telephone', 'nom_entreprise', 'numero_entreprise')
+        fields = ('id', 'telephone', 'nom_entreprise', 'numero_entreprise')
 
 
 class ClientParticulier(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('pk_client', 'courriel', 'telephone', 'nom_particulier', 'prenom_particulier',  'sexe')
+        fields = ('id', 'telephone', 'nom_particulier', 'prenom_particulier', 'sexe')
