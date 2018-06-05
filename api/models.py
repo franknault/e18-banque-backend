@@ -44,10 +44,10 @@ class Client(models.Model):
     @property
     def full_name(self):
         "Return the full name"
-        if self.NomParticulier and self.PrenomParticulier:
-            return '%s %s' % (self.PrenomParticulier, self.NomParticulier)
-        elif self.NomEntreprise and self.NumeroEntreprise:
-            return '%s, %s' % (self.NomEntreprise, self.NumeroEntreprise)
+        if self.nom_particulier and self.prenom_particulier:
+            return '%s %s' % (self.prenom_particulier, self.nom_particulier)
+        elif self.nom_entreprise and self.numero_entreprise:
+            return '%s, %s' % (self.nom_entreprise, self.numero_entreprise)
 
     class Meta:
         db_table = 'client'
