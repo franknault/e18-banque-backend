@@ -62,7 +62,7 @@ class Adresse(models.Model):
     code_postal = models.CharField(max_length=6)
     ville = models.CharField(max_length=100)
     pays = models.CharField(max_length=100)
-    client = models.OneToOneField(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     @property
     def full_address(self):
