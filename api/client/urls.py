@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from api.client.view import *
+from api.client.views import *
 
 urlpatterns = [
     url(r'^clients/entreprises$', ClientsEntrepriseApi.as_view()),
