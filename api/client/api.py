@@ -1,7 +1,7 @@
 from rest_framework.generics import ListAPIView
 
 from .serializers import *
-from .models import Client
+from api.models import Client
 
 
 class ClientsApi(ListAPIView):

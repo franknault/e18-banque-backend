@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Adresse, Client, Compte, Courant, CarteCredit, Credit, Transaction, TypeTransaction
+from api.models import Adresse, Client, Compte, Courant, CarteCredit, Credit, Transaction, TypeTransaction
 
 
 class ClientSerializer(serializers.ModelSerializer):
