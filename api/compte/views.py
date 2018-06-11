@@ -1,15 +1,16 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
+from django_filters import rest_framework as filters
 
 from api.models import *
 from . import serializers
 
 
-class Comptes(generics.ListCreateAPIView):
+class ComptesList(generics.ListCreateAPIView):
+    queryset = Compte.objects.all()
     serializer_class = serializers.CompteBasicSerializer
-
-    def get_queryset(self):
-        return Compte.objects.filter()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('num_compte', 'id', 'solde', 'date_ouverture', 'date_fermeture')
 
     def post(self, request, *args, **kwargs):
         return Response({'message':'Création d\'un compte'}, status.HTTP_200_OK)
