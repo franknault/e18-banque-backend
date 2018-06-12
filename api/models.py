@@ -1,16 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
-
-class InfoAuthentification(models.Model):
+class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
-    nom_usager = models.CharField(max_length=20, unique=True)
-    mdp = models.CharField(max_length=512)
-    courriel = models.EmailField()
 
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
-    info_authentification = models.ForeignKey(InfoAuthentification, on_delete=models.CASCADE)
+    info_authentification = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Client(models.Model):
@@ -31,7 +29,7 @@ class Client(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    info_authentification = models.OneToOneField(InfoAuthentification, on_delete=models.CASCADE)
+    info_authentification = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=11)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     nom_particulier = models.CharField(max_length=50, null=True, blank=True)
@@ -62,7 +60,7 @@ class Adresse(models.Model):
     code_postal = models.CharField(max_length=6)
     ville = models.CharField(max_length=100)
     pays = models.CharField(max_length=100)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, related_name='adresses', on_delete=models.CASCADE)
 
     @property
     def full_address(self):
@@ -128,12 +126,12 @@ class Credit(Compte):
 class TypeTransaction(models.Model):
     VIREMENTDEBITDEBIT = 'VMT'
     PAIEMENTDEDEBITACREDIT = 'PMT'
-    ACHATDEBITACREDIT = 'ACT'
+    ACHATCREDITADEBIT = 'ACT'
     REMBOURSEMENTCREDITACREDIT = 'RBT'
     TYPE_CHOICES = (
         (VIREMENTDEBITDEBIT, 'Virement debit-debit'),
         (PAIEMENTDEDEBITACREDIT, 'Paiement debit-credit'),
-        (ACHATDEBITACREDIT, 'Achat debit-credit'),
+        (ACHATCREDITADEBIT, 'Achat credit-debit'),
         (REMBOURSEMENTCREDITACREDIT, 'Remboursement credit-credit'),
     )
 
@@ -156,9 +154,10 @@ class Transaction(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    type_transaction = models.OneToOneField(TypeTransaction, on_delete=models.DO_NOTHING)
-    compte = models.OneToOneField(Compte, on_delete=models.DO_NOTHING)
-    type_transaction = models.OneToOneField('self', on_delete=models.DO_NOTHING)
+    id_transfert = models.IntegerField()
+    type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.DO_NOTHING)
+    compte = models.ForeignKey(Compte, related_name='transactions', on_delete=models.DO_NOTHING)
+    trx = models.OneToOneField('self', on_delete=models.DO_NOTHING, null=True)
     date_debut = models.DateTimeField(auto_now_add=True)
     date_fin = models.DateTimeField(null=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2)

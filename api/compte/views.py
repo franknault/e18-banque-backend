@@ -23,14 +23,14 @@ class ComptesId(generics.RetrieveUpdateDestroyAPIView):
         return Compte.objects.filter()
 
     def patch(self, request, *args, **kwargs):
-        return Response({'message': 'Changement d\' un élément sur un compte'}, status.HTTP_200_OK)
+        return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        return Response({'message': 'Suppression d\'un compte'}, status.HTTP_200_OK)
+        return self.destroy(request, *args, **kwargs)
 
 
 class ComptesIdTransaction(generics.ListAPIView):
-    serializer_class = serializers.CompteBasicSerializer
+    serializer_class = serializers.CompteTransactionSerializer
 
     def get_queryset(self):
-        return Compte.objects.filter()
+        return Compte.objects.filter(pk=self.kwargs['pk'])
