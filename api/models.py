@@ -62,7 +62,7 @@ class Adresse(models.Model):
     code_postal = models.CharField(max_length=6)
     ville = models.CharField(max_length=100)
     pays = models.CharField(max_length=100)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, related_name='adresses', on_delete=models.CASCADE)
 
     @property
     def full_address(self):
@@ -156,9 +156,10 @@ class Transaction(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    type_transaction = models.OneToOneField(TypeTransaction, on_delete=models.DO_NOTHING)
-    compte = models.OneToOneField(Compte, on_delete=models.DO_NOTHING)
-    type_transaction = models.OneToOneField('self', on_delete=models.DO_NOTHING)
+    id_transfert = models.IntegerField()
+    type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.DO_NOTHING)
+    compte = models.ForeignKey(Compte, related_name='transactions', on_delete=models.DO_NOTHING)
+    trx = models.OneToOneField('self', on_delete=models.DO_NOTHING, null=True)
     date_debut = models.DateTimeField(auto_now_add=True)
     date_fin = models.DateTimeField(null=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2)
