@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+
 class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
 
@@ -87,6 +88,9 @@ class Compte(models.Model):
     solde = models.DecimalField(max_digits=10, decimal_places=2)
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
+
+    def has_enough_sold(self, montant):
+        return self.solde.__ge__(montant)
 
     class Meta:
         db_table = 'compte'

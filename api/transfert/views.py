@@ -1,28 +1,59 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-import json
+from decimal import Decimal
 
 from api.models import *
 
 
-class TransfertFreeze(generics.CreateAPIView):
-
+class TransfertVirement(generics.CreateAPIView):
+    #type_trx = TypeTransaction.objects.get(type=TypeTransaction.VIREMENTDEBITDEBIT)
     def post(self, request, *args, **kwargs):
         body = request.data
         if not body:
-            return Response({'détail':'Veuillez fournir les informations nécessaires dans le body.'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'Détail':'Veuillez fournir les informations nécessaires dans le body.'}, status.HTTP_400_BAD_REQUEST)
 
-        if body['type_transfert'] == TypeTransaction.VIREMENTDEBITDEBIT:
-            return traiter_virement(self, body)
+        if not Courant.objects.filter(num_compte=body['compte_destinataire']).exists() or Courant.objects.filter(num_compte=body['compte_provenance']).exists():
+            return Response({'Détail':'Compte de destination ou de provenance introuvable.'}, status.HTTP_400_BAD_REQUEST)
 
-        if request.data['type_transfert'] == TypeTransaction.PAIEMENTDEDEBITACREDIT:
-            return traiter_paiement(self, body)
+        cpt_prov = Courant.objects.filter(num_compte=body['compte_destinataire']).first()
+        cpt_dest = Courant.objects.filter(num_compte=body['compte_provenance']).first()
 
-        if request.data['type_transfert'] == TypeTransaction.ACHATCREDITADEBIT:
-            return traiter_achat(self, body)
+        if cpt_prov.has_enough_sold(body['montant']):
+            return Response({'Détail':'Solde insuffisant dans le compte de provenance'}, status.HTTP_400_BAD_REQUEST)
 
-        if request.data['type_transfert'] == TypeTransaction.REMBOURSEMENTCREDITACREDIT:
-            return traiter_remboursement(self, body)
+        trx_prov = Transaction.objects.create(id_transfert=body['id_transfert'],
+                                              type_transaction=1,
+                                              compte=cpt_prov,
+                                              montant=body['montant'],
+                                              solde_avant=cpt_prov.solde,
+                                              solde_apres=cpt_prov.solde+Decimal(body['montant']),
+                                              etat=Transaction.GELE)
+
+        trx_dest = Transaction.objects.create(id_transfert=body['id_transfert'],
+                                              type_transaction=1,
+                                              compte=cpt_dest,
+                                              trx_id=trx_prov.id,
+                                              montant=body['montant'],
+                                              solde_avant=cpt_dest.solde,
+                                              solde_apres=cpt_dest.solde+Decimal(body['montant']),
+                                              etat=Transaction.GELE)
+
+        trx_prov.trx_id = trx_dest.id
+
+
+
+class TransfertPaiement(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        return Response({"message": "Transfert Débit à Crédit"})
+
+class TransfertAchat(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        return Response({"message": "Transfert Crédit à Débit"})
+
+class TransfertRemboursement(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        return Response({"message": "Transfert Crédit à Crédit"})
+
 
 
 def traiter_virement(self, body):
