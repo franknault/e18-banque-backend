@@ -1,16 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
-
-class InfoAuthentification(models.Model):
+class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
-    nom_usager = models.CharField(max_length=20, unique=True)
-    mdp = models.CharField(max_length=512)
-    courriel = models.EmailField()
 
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
-    info_authentification = models.ForeignKey(InfoAuthentification, on_delete=models.CASCADE)
+    info_authentification = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Client(models.Model):
@@ -31,7 +29,7 @@ class Client(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    info_authentification = models.OneToOneField(InfoAuthentification, on_delete=models.CASCADE)
+    info_authentification = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=11)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     nom_particulier = models.CharField(max_length=50, null=True, blank=True)
