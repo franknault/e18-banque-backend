@@ -13,7 +13,7 @@ class ComptesList(generics.ListCreateAPIView):
     filter_fields = ('num_compte', 'id', 'solde', 'date_ouverture', 'date_fermeture')
 
     def post(self, request, *args, **kwargs):
-        return Response({'message':'Création d\'un compte'}, status.HTTP_200_OK)
+        return self.create(request, *args, **kwargs)
 
 
 class ComptesId(generics.RetrieveUpdateDestroyAPIView):
