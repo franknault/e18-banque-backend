@@ -126,12 +126,12 @@ class Credit(Compte):
 class TypeTransaction(models.Model):
     VIREMENTDEBITDEBIT = 'VMT'
     PAIEMENTDEDEBITACREDIT = 'PMT'
-    ACHATDEBITACREDIT = 'ACT'
+    ACHATCREDITADEBIT = 'ACT'
     REMBOURSEMENTCREDITACREDIT = 'RBT'
     TYPE_CHOICES = (
         (VIREMENTDEBITDEBIT, 'Virement debit-debit'),
         (PAIEMENTDEDEBITACREDIT, 'Paiement debit-credit'),
-        (ACHATDEBITACREDIT, 'Achat debit-credit'),
+        (ACHATCREDITADEBIT, 'Achat credit-debit'),
         (REMBOURSEMENTCREDITACREDIT, 'Remboursement credit-credit'),
     )
 
