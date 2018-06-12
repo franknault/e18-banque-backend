@@ -4,9 +4,6 @@ from django.conf import settings
 
 class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
-    nom_usager = models.CharField(max_length=20, unique=True)
-    mdp = models.CharField(max_length=512)
-    courriel = models.EmailField()
 
 
 class Administrateur(models.Model):

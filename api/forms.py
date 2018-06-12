@@ -6,7 +6,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = InfoAuthentification
-        fields = ('username', 'password', 'nom_usager', 'mdp', 'courriel')
+        fields = ('__all__')
 
 class CustomUserChangeForm(UserChangeForm):
 
