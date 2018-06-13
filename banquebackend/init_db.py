@@ -4,19 +4,19 @@ from datetime import date
 
 def import_db():
     # Info Client
-    info_roni = InfoAuthentification.objects.create(nom_usager="roni", mdp="gti525", courriel="roni@gmail.com")
-    info_fodil = InfoAuthentification.objects.create(nom_usager="fodil", mdp="gti525", courriel="fodil@gmail.com")
-    info_philippe = InfoAuthentification.objects.create(nom_usager="philippe", mdp="gti525", courriel="philippe@gmail.com")
-    info_francis = InfoAuthentification.objects.create(nom_usager="francis", mdp="gti525", courriel="francis@gmail.com")
-    info_javier = InfoAuthentification.objects.create(nom_usager="javier", mdp="gti525", courriel="javier@gmail.com")
+    info_roni = InfoAuthentification.objects.create(username="roni", password="gti525", email="roni@gmail.com")
+    info_fodil = InfoAuthentification.objects.create(username="fodil", password="gti525", email="fodil@gmail.com")
+    info_philippe = InfoAuthentification.objects.create(username="philippe", password="gti525", email="philippe@gmail.com")
+    info_francis = InfoAuthentification.objects.create(username="francis", password="gti525", email="francis@gmail.com")
+    info_javier = InfoAuthentification.objects.create(username="javier", password="gti525", email="javier@gmail.com")
 
     # Info Entreprise
-    info_ubisoft = InfoAuthentification.objects.create(nom_usager="ubisoft", mdp="gti525", courriel="ubisoft@gmail.com")
-    info_metro = InfoAuthentification.objects.create(nom_usager="metro", mdp="gti525", courriel="metro@gmail.com")
+    info_ubisoft = InfoAuthentification.objects.create(username="ubisoft", password="gti525", email="ubisoft@gmail.com")
+    info_metro = InfoAuthentification.objects.create(username="metro", password="gti525", email="metro@gmail.com")
 
     # Admin
-    info_admin = InfoAuthentification.objects.create(nom_usager="admin", mdp="admin", courriel="admin@gmail.com")
-    info_root = InfoAuthentification.objects.create(nom_usager="root", mdp="root", courriel="root@gmail.com")
+    info_admin = InfoAuthentification.objects.create(username="admin", password="admin", email="admin@gmail.com")
+    info_root = InfoAuthentification.objects.create(username="root", password="root", email="root@gmail.com")
 
     # Client Particulier
     roni = Client.objects.create(nom_particulier="Moufarrej", prenom_particulier="Roni", sexe=Client.HOMME, type=Client.PARTICULIER,

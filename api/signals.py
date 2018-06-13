@@ -1,10 +1,27 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from api.models import *
+from decimal import Decimal
 
 from faker import Faker
 
 fake = Faker()
+
+
+@receiver(post_save, sender=Transaction)
+def gel_fond(sender, instance, **kwargs):
+    if instance.etat == Transaction.GELE:
+        compte = instance.compte
+        compte.solde = Decimal(compte.solde) + Decimal(instance.montant)
+        compte.save()
+
+    if instance.etat == Transaction.ACCEPTE:
+        compte.save()
+
+    if instance.etat == Transaction.REFUSE:
+        compte = instance.compte
+        compte.solde = Decimal(compte.solde) + Decimal(instance.montant)
+        compte.save()
 
 
 @receiver(post_save, sender=Courant)
