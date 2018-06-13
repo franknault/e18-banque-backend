@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.core.validators import MinValueValidator
 
 
 class InfoAuthentification(AbstractUser):
@@ -85,7 +86,7 @@ class Session(models.Model):
 class Compte(models.Model):
     id = models.AutoField(primary_key=True)
     num_compte = models.CharField(max_length=8, unique=True)
-    solde = models.DecimalField(max_digits=10, decimal_places=2)
+    solde = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
 
@@ -158,10 +159,9 @@ class Transaction(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    id_transfert = models.IntegerField()
     type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.DO_NOTHING)
     compte = models.ForeignKey(Compte, related_name='transactions', on_delete=models.DO_NOTHING)
-    trx = models.OneToOneField('self', on_delete=models.DO_NOTHING, null=True)
+    trx = models.OneToOneField('self', related_name='transaction', on_delete=models.DO_NOTHING, null=True)
     date_debut = models.DateTimeField(auto_now_add=True)
     date_fin = models.DateTimeField(null=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2)

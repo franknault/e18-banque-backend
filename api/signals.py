@@ -12,15 +12,14 @@ fake = Faker()
 def gel_fond(sender, instance, **kwargs):
     if instance.etat == Transaction.GELE:
         compte = instance.compte
-        compte.solde = Decimal(compte.solde) + Decimal(instance.montant)
+        compte.solde = compte.solde + instance.montant
         compte.save()
 
-    if instance.etat == Transaction.ACCEPTE:
-        compte.save()
+    # if instance.etat == Transaction.ACCEPTE:
 
     if instance.etat == Transaction.REFUSE:
         compte = instance.compte
-        compte.solde = Decimal(compte.solde) + Decimal(instance.montant)
+        compte.solde = compte.solde + instance.montant
         compte.save()
 
 
