@@ -10,7 +10,7 @@ from django.http import JsonResponse
 class TransactionsList(generics.ListCreateAPIView):
 
     """
-    GET  Method
+    GET Method
     Route : transaction/
     """
 
@@ -18,11 +18,73 @@ class TransactionsList(generics.ListCreateAPIView):
     serializer_class = serializers.TransactionSerializer
 
     """
-    POST  Method
+    POST Method
     Route : transaction/
     """
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    """
+    HEAD Method
+    Override the default HEAD method to disable it and to return a French message.
+    Route : transaction/
+    """
+
+    def head(self, request):
+        if request.method == 'HEAD':
+            return JsonResponse({'État': "échoué", 'message': "L'opération HEAD n'est pas supporté"}, status=403)
+
+    """
+    OPTIONS Method
+    Override the default OPTIONS method to disable it and to return a French message.
+    Route : transaction/
+    """
+
+    def options(self, request):
+        if request.method == 'OPTIONS':
+            return JsonResponse({'État': "échoué", 'message': "L'opération OPTIONS n'est pas supporté"}, status=403)
+
+    """
+    PATCH Method
+    Override the default PATCH method to disable it and to return a French message.
+    Route : transaction/
+    """
+
+    def patch(self, request, *args, **kwargs):
+            return Response(
+                data={
+                    'État': "échoué", 'message': "L'opération PATCH n'est pas supporté"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    """
+    PUT Method
+    Override the default PUT method to disable it and to return a French message.
+    Route : transaction/
+    """
+
+    def put(self, request, *args, **kwargs):
+            return Response(
+                data={
+                    'État': "échoué", 'message': "L'opération PUT n'est pas supporté"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    """
+    DELETE Method
+    Override the default DELETE method to disable it and to return a French message.
+    Route : transaction/
+    """
+
+    def delete(self, request, *args, **kwargs):
+            return Response(
+                data={
+                    'État': "échoué", 'message': "L'opération DELETE n'est pas supporté"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class TransactionId(RetrieveUpdateDestroyAPIView):
@@ -42,7 +104,7 @@ class TransactionId(RetrieveUpdateDestroyAPIView):
         except Transaction.DoesNotExist:
             return Response(
                 data={
-                    "message": "Transaction with id: {} does not exist".format(kwargs["pk"])
+                    "message": "La transaction avec l'id: {} n'existe pas".format(kwargs["pk"])
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
@@ -51,20 +113,62 @@ class TransactionId(RetrieveUpdateDestroyAPIView):
     PATCH Method
     Route : transaction/:id/
     """
+
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        try:
+            transaction = self.queryset.get(pk=kwargs["pk"])
+            return self.partial_update(request, *args, **kwargs)
+        except Transaction.DoesNotExist:
+            return Response(
+                data={
+                    "message": "La transaction avec l'id: {} n'existe pas".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
     """
-    Override the default delete method to disable it 
+    DELETE Method
+    Override the default DELETE method to disable it and to return a French message.
     Route : transaction/:id/
     """
     def destroy(self, request, *args, **kwargs):
-        return JsonResponse({'success': False, 'message': "DELETE not allowed"}, status=403)
+        return JsonResponse({'État': "échoué", 'message': "L'opération DELETE n'est pas supporté"}, status=403)
 
     """
-    Override the default put method to disable it 
+    PUT Method
+    Override the default PUT method to disable it and to return a French message.
     Route : transaction/:id/
     """
 
     def put(self, request, *args, **kwargs):
-        return JsonResponse({'success': False, 'message': "PUT not allowed"}, status=403)
+        return JsonResponse({'État': "échoué", 'message': "L'opération PUT n'est pas supporté"}, status=403)
+
+    """
+    POST Method
+    Override the default POST method to disable it and to return a French message.
+    Route : transaction/:id/
+    """
+
+    def post(self, request, *args, **kwargs):
+        return JsonResponse({'État': "échoué", 'message': "L'opération POST n'est pas supporté"}, status=403)
+
+    """
+    HEAD Method
+    Override the default HEAD method to disable it and to return a French message.
+    Route : transaction/:id/
+    """
+
+    def head(self, request, *args, **kwargs):
+        if request.method == 'HEAD':
+            return JsonResponse({'État': "échoué", 'message': "L'opération HEAD n'est pas supporté"}, status=403)
+
+    """
+    OPTIONS Method
+    Override the default OPTIONS method to disable it and to return a French message.
+    Route : transaction/:id/
+    """
+
+    def options(self, request, *args, **kwargs):
+        if request.method == 'OPTIONS':
+            return JsonResponse({'État': "échoué", 'message': "L'opération OPTIONS n'est pas supporté"}, status=403)
+
