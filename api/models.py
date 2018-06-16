@@ -90,7 +90,7 @@ class Compte(models.Model):
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
 
-    def has_enough_sold(self, montant):
+    def has_enough_solde(self, montant):
         return self.solde.__ge__(montant)
 
     class Meta:
@@ -114,6 +114,12 @@ class CarteCredit(models.Model):
     cvv = models.CharField(max_length=255)
     date_emission = models.DateTimeField(auto_now_add=True)
 
+    def validate(self, exp, cvv):
+        return (self.expiration() == exp) and (self.cvv == cvv)
+
+    def expiration(self):
+        return self.mois_expiration + '/' + self.annee_expiration
+
     class Meta:
         db_table = 'cartecredit'
 
@@ -123,6 +129,9 @@ class Credit(Compte):
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
     carte_credit = models.OneToOneField(CarteCredit, on_delete=models.CASCADE)
     limite = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def has_enough_credit(self, montant):
+        return (self.solde + montant).__le__(self.limite)
 
     class Meta:
         db_table = 'credit'
