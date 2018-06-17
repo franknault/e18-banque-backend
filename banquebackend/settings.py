@@ -126,11 +126,20 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_PERMISSION_CLASSES': [
+      'rest_framework.permissions.IsAuthenticated'
+    ],
 }
+
+MIDDLEWARE_CLASSES = [
+
+    'django.middleware.locale.LocaleMiddleware'
+]
 
 # CORS Header Django Rest Framework
 CORS_ORIGIN_ALLOW_ALL = True
@@ -138,7 +147,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "fr-fr"
 
 TIME_ZONE = 'America/Montreal'
 
@@ -166,3 +175,4 @@ try:
     from banquebackend.local_settings import *
 except ImportError:
     pass
+
