@@ -133,13 +133,19 @@ REST_FRAMEWORK = {
     ],
 }
 
+MIDDLEWARE_CLASSES = [
+
+    'django.middleware.locale.LocaleMiddleware'
+]
+
 # CORS Header Django Rest Framework
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "fr-fr"
 
 TIME_ZONE = 'UTC'
 
@@ -161,3 +167,4 @@ try:
     from banquebackend.local_settings import *
 except ImportError:
     pass
+
