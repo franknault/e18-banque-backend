@@ -29,12 +29,11 @@ class TransfertAchatSerializer(serializers.Serializer):
 
 
 class TransfertStateSerializer(serializers.Serializer):
+    cle_api = serializers.CharField()
     etat = serializers.ChoiceField(choices=[Transaction.ACCEPTE, Transaction.REFUSE])
-
 
 
 class TransactionListSerializer(serializers.ModelSerializer):
-    etat = serializers.ChoiceField(choices=[Transaction.ACCEPTE, Transaction.REFUSE])
 
     class Meta:
         model = Transaction

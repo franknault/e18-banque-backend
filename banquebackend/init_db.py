@@ -29,10 +29,8 @@ def import_db():
                                      telephone="4501236570", date_naissance=date(1987,12,12), info_authentification=info_philippe)
     francis = Client.objects.create(nom_particulier="Nault", prenom_particulier="Francis", sexe=Client.HOMME, type=Client.PARTICULIER,
                                     telephone="5609001232", date_naissance=date(1995,2,8), info_authentification=info_francis)
-    Client.objects.create(nom_particulier="Admin", prenom_particulier="Admin", sexe=Client.HOMME, type=Client.PARTICULIER,
-                          telephone="4388220989", date_naissance=date(1992,6,7), info_authentification=info_admin)
-    Client.objects.create(nom_particulier="Root", prenom_particulier="Root", sexe=Client.HOMME, type=Client.PARTICULIER,
-                          telephone="5148631221", date_naissance=date(2000,12,12), info_authentification=info_root)
+    Administrateur.objects.create(info_authentification=info_admin)
+    Administrateur.objects.create(info_authentification=info_root)
 
     # Client Entreprise
     ubisoft = Client.objects.create(nom_entreprise="Ubisoft", numero_entreprise="54321", type=Client.ENTREPRISE,
@@ -63,4 +61,14 @@ def import_db():
     rbt = TypeTransaction.objects.create(type="RBT", description="Remboursement d'un compte crédit vers un compte crédit.")
 
 
+def flush_db():
+    Adresse.objects.all().delete()
+    TypeTransaction.objects.all().delete()
+    Client.objects.all().delete()
+    Administrateur.objects.all().delete()
+    InfoAuthentification.objects.all().delete()
+    CarteCredit.objects.all().delete()
+    Credit.objects.all().delete()
+    Courant.objects.all().delete()
+    Compte.objects.all().delete()
 

@@ -7,10 +7,16 @@ from django.core.validators import MinValueValidator
 class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
 
+    def __str__(self):
+        return self.email
+
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
     info_authentification = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.info_authentification.__str__()
 
 
 class Client(models.Model):
@@ -41,13 +47,15 @@ class Client(models.Model):
     nom_entreprise = models.CharField(max_length=50, null=True, blank=True)
     numero_entreprise = models.CharField(max_length=50, null=True, blank=True)
 
-    @property
     def full_name(self):
         "Return the full name"
         if self.nom_particulier and self.prenom_particulier:
             return '%s %s' % (self.prenom_particulier, self.nom_particulier)
         elif self.nom_entreprise and self.numero_entreprise:
             return '%s, %s' % (self.nom_entreprise, self.numero_entreprise)
+
+    def __str__(self):
+        return self.full_name()
 
     class Meta:
         db_table = 'client'
@@ -64,10 +72,12 @@ class Adresse(models.Model):
     pays = models.CharField(max_length=100)
     client = models.ForeignKey(Client, related_name='adresses', on_delete=models.CASCADE)
 
-    @property
     def full_address(self):
         "Return the full address"
         return '%s %s, %s, %s, %s' % (self.no_civique, self.nom_rue, self.code_postal, self.ville, self.pays)
+
+    def __str__(self):
+        return self.full_address()
 
     class Meta:
         db_table = 'adresse'
@@ -92,6 +102,9 @@ class Compte(models.Model):
 
     def has_enough_solde(self, montant):
         return self.solde.__ge__(montant)
+
+    def __str__(self):
+        return self.num_compte
 
     class Meta:
         db_table = 'compte'
@@ -119,6 +132,9 @@ class CarteCredit(models.Model):
 
     def expiration(self):
         return self.mois_expiration + '/' + self.annee_expiration
+
+    def __str__(self):
+        return self.num_carte
 
     class Meta:
         db_table = 'cartecredit'
@@ -153,6 +169,9 @@ class TypeTransaction(models.Model):
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     description = models.TextField()
 
+    def __str__(self):
+        return self.get_type_display()
+
     class Meta:
         db_table = 'type_transaction'
 
@@ -177,6 +196,9 @@ class Transaction(models.Model):
     solde_avant = models.DecimalField(max_digits=10, decimal_places=2)
     solde_apres = models.DecimalField(max_digits=10, decimal_places=2)
     etat = models.CharField(max_length=3, choices=ETAT_CHOICES)
+
+    def __str__(self):
+        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte, self.etat,self.type_transaction.get_type_display())
 
     class Meta:
         db_table = 'transaction'

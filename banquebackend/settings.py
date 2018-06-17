@@ -25,6 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'h@=kjy4l@%d4geph-@rw(xegmvp#03cmy2ln5&y0-3cphhe&an'
 
+# API KEY: Clé d'api pour le service de passerelle
+PASSERELLE_API_KEY = '12345'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -149,6 +152,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Expiration time for 'GEL' transaction in DB in seconds.
+TRANSACTION_EXPIRE = 1
+
+# Interval between each DB lookup for expired transaction
+TRANSACTION_LOOKUP = 60
 
 django_heroku.settings(locals())
 DATABASES['default'] = dj_database_url.config()
