@@ -5,10 +5,12 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import status
 from django.http import JsonResponse
+from rest_framework.permissions import IsAdminUser
 
 
 class TransactionsList(generics.ListCreateAPIView):
 
+    permission_classes = (IsAdminUser,)
     """
     GET Method
     Route : transaction/
@@ -88,6 +90,8 @@ class TransactionsList(generics.ListCreateAPIView):
 
 
 class TransactionId(RetrieveUpdateDestroyAPIView):
+
+    permission_classes = (IsAdminUser,)
 
     queryset = Transaction.objects.all()
     serializer_class = serializers.TransactionSerializer
