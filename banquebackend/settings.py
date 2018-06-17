@@ -162,10 +162,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Expiration time for 'GEL' transaction in DB in seconds.
-TRANSACTION_EXPIRE = 1
+# Expiration time for 'GEL' transaction in DB in minutes.
+TRANSACTION_EXPIRE = 20
 
-# Interval between each DB lookup for expired transaction
+# Interval between each DB lookup for expired transaction in seconds
 TRANSACTION_LOOKUP = 60
 
 django_heroku.settings(locals())

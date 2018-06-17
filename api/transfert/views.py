@@ -6,6 +6,7 @@ from datetime import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.utils.timezone import localtime
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import *
 
@@ -37,6 +38,8 @@ class TransfertPaiement(generics.CreateAPIView):
 class TransfertAchat(generics.CreateAPIView):
     """ API de création d'un achat, un transfert d'un compte crédit vers un compte débit """
 
+    permission_classes = (AllowAny,)
+
     """
     POST Methode
     Route : tranfert/achat
@@ -67,7 +70,7 @@ class TransfertAchat(generics.CreateAPIView):
             return Response({"Message": "Les informations d'identification de la carte de crédit sont invalides (expiration et/ou cvv)"}, status.HTTP_400_BAD_REQUEST)
 
         if not cpt_prov.has_enough_credit(montant=montant):
-            return Response({"Message": "Solde insuffisant dans le compte de provenance"})
+            return Response({"Message": "Solde insuffisant dans le compte de provenance."})
 
         trx_prov = Transaction.objects.create(type_transaction=type_trx,
                                               compte=cpt_prov,
@@ -106,12 +109,14 @@ class TransfertState(generics.RetrieveUpdateAPIView):
     """ API de gestion de transfert. Permet un vérification et un changement d'état : REF ou ACC """
 
     serializer_class = TransactionListSerializer
+    permission_classes = (AllowAny,)
 
     """
     GET Methode
     Route : transfert/:id
     """
     def get_queryset(self):
+
         return Transaction.objects.filter()
 
     """
