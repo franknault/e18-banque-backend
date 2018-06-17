@@ -146,7 +146,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 LANGUAGE_CODE = "fr-fr"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Montreal'
 
 USE_I18N = True
 
