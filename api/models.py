@@ -1,14 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.core.validators import MinValueValidator
+
 
 class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
+
+    def __str__(self):
+        return self.email
 
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
     info_authentification = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.info_authentification.__str__()
 
 
 class Client(models.Model):
@@ -39,13 +47,15 @@ class Client(models.Model):
     nom_entreprise = models.CharField(max_length=50, null=True, blank=True)
     numero_entreprise = models.CharField(max_length=50, null=True, blank=True)
 
-    @property
     def full_name(self):
         "Return the full name"
         if self.nom_particulier and self.prenom_particulier:
             return '%s %s' % (self.prenom_particulier, self.nom_particulier)
         elif self.nom_entreprise and self.numero_entreprise:
             return '%s, %s' % (self.nom_entreprise, self.numero_entreprise)
+
+    def __str__(self):
+        return self.full_name()
 
     class Meta:
         db_table = 'client'
@@ -62,10 +72,12 @@ class Adresse(models.Model):
     pays = models.CharField(max_length=100)
     client = models.ForeignKey(Client, related_name='adresses', on_delete=models.CASCADE)
 
-    @property
     def full_address(self):
         "Return the full address"
         return '%s %s, %s, %s, %s' % (self.no_civique, self.nom_rue, self.code_postal, self.ville, self.pays)
+
+    def __str__(self):
+        return self.full_address()
 
     class Meta:
         db_table = 'adresse'
@@ -84,9 +96,15 @@ class Session(models.Model):
 class Compte(models.Model):
     id = models.AutoField(primary_key=True)
     num_compte = models.CharField(max_length=8, unique=True)
-    solde = models.DecimalField(max_digits=10, decimal_places=2)
+    solde = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
+
+    def has_enough_solde(self, montant):
+        return self.solde.__ge__(montant)
+
+    def __str__(self):
+        return self.num_compte
 
     class Meta:
         db_table = 'compte'
@@ -109,6 +127,15 @@ class CarteCredit(models.Model):
     cvv = models.CharField(max_length=255)
     date_emission = models.DateTimeField(auto_now_add=True)
 
+    def validate(self, exp, cvv):
+        return (self.expiration() == exp) and (self.cvv == cvv)
+
+    def expiration(self):
+        return self.mois_expiration + '/' + self.annee_expiration
+
+    def __str__(self):
+        return self.num_carte
+
     class Meta:
         db_table = 'cartecredit'
 
@@ -119,6 +146,9 @@ class Credit(Compte):
     carte_credit = models.OneToOneField(CarteCredit, on_delete=models.CASCADE)
     limite = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def has_enough_credit(self, montant):
+        return (self.solde + montant).__le__(self.limite)
+
     class Meta:
         db_table = 'credit'
 
@@ -126,18 +156,21 @@ class Credit(Compte):
 class TypeTransaction(models.Model):
     VIREMENTDEBITDEBIT = 'VMT'
     PAIEMENTDEDEBITACREDIT = 'PMT'
-    ACHATDEBITACREDIT = 'ACT'
+    ACHATCREDITADEBIT = 'ACT'
     REMBOURSEMENTCREDITACREDIT = 'RBT'
     TYPE_CHOICES = (
         (VIREMENTDEBITDEBIT, 'Virement debit-debit'),
         (PAIEMENTDEDEBITACREDIT, 'Paiement debit-credit'),
-        (ACHATDEBITACREDIT, 'Achat debit-credit'),
+        (ACHATCREDITADEBIT, 'Achat credit-debit'),
         (REMBOURSEMENTCREDITACREDIT, 'Remboursement credit-credit'),
     )
 
     id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     description = models.TextField()
+
+    def __str__(self):
+        return self.get_type_display()
 
     class Meta:
         db_table = 'type_transaction'
@@ -154,16 +187,18 @@ class Transaction(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    id_transfert = models.IntegerField()
     type_transaction = models.ForeignKey(TypeTransaction, on_delete=models.DO_NOTHING)
     compte = models.ForeignKey(Compte, related_name='transactions', on_delete=models.DO_NOTHING)
-    trx = models.OneToOneField('self', on_delete=models.DO_NOTHING, null=True)
+    trx = models.OneToOneField('self', related_name='transaction', on_delete=models.DO_NOTHING, null=True)
     date_debut = models.DateTimeField(auto_now_add=True)
     date_fin = models.DateTimeField(null=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2)
     solde_avant = models.DecimalField(max_digits=10, decimal_places=2)
     solde_apres = models.DecimalField(max_digits=10, decimal_places=2)
     etat = models.CharField(max_length=3, choices=ETAT_CHOICES)
+
+    def __str__(self):
+        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte, self.etat,self.type_transaction.get_type_display())
 
     class Meta:
         db_table = 'transaction'
