@@ -61,16 +61,16 @@ class TransfertAchat(generics.CreateAPIView):
             return Response({"Message": "Le compte de provenance ou de destination est introuvable."}, status.HTTP_404_NOT_FOUND)
 
         if cpt_prov.num_compte == cpt_dest.num_compte:
-            return Response({"Message": "Le compte de destination ne peut être identique au compte de provenance."})
+            return Response({"Message": "Le compte de destination ne peut être identique au compte de provenance."}, status.HTTP_412_PRECONDITION_FAILED)
 
         if api_key != settings.PASSERELLE_API_KEY:
             return Response({"Message": "Vous n'êtes pas autorisé à modifier cette transaction."}, status.HTTP_401_UNAUTHORIZED)
 
         if not cpt_prov.carte_credit.validate(exp=serializer.data['crt_exp'], cvv=serializer.data['crt_cvv']):
-            return Response({"Message": "Les informations d'identification de la carte de crédit sont invalides (expiration et/ou cvv)"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"Message": "Les informations d'identification de la carte de crédit sont invalides (expiration et/ou cvv)"}, status.HTTP_417_EXPECTATION_FAILED)
 
         if not cpt_prov.has_enough_credit(montant=montant):
-            return Response({"Message": "Solde insuffisant dans le compte de provenance."})
+            return Response({"Message": "Solde insuffisant dans le compte de provenance."}, status.HTTP_412_PRECONDITION_FAILED)
 
         trx_prov = Transaction.objects.create(type_transaction=type_trx,
                                               compte=cpt_prov,
@@ -142,7 +142,7 @@ class TransfertState(generics.RetrieveUpdateAPIView):
             return Response({"Message": "Vous n'êtes pas autorisé à modifier cette transaction."}, status.HTTP_401_UNAUTHORIZED)
 
         if trx.etat == Transaction.ACCEPTE and trx.etat == Transaction.REFUSE:
-            return Response({"Message": "La transaction a déjà été accepté ou refusé."}, status.HTTP_400_BAD_REQUEST)
+            return Response({"Message": "La transaction a déjà été accepté ou refusé."}, status.HTTP_412_PRECONDITION_FAILED)
 
         trx.date_fin = localtime(timezone.now())
         trx.etat = etat
