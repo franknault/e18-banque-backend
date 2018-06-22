@@ -3,13 +3,9 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    url(r'^clients/entreprises$', views.ClientsEntrepriseApi.as_view()),
-    url(r'^clients/particuliers$', views.ClientsParticulierApi.as_view()),
-    url(r'^clients$', views.ClientsList.as_view()),
-    path('rest-auth/', include('rest_auth.urls')),
-
     path('client', views.ClientsList.as_view()),
     path('client/<int:pk>', views.ClientsList.as_view()),
     path('client/<int:pk>/adresse', views.ClientsList.as_view()),
-
+    path('client/<int:pk>/compte', views.ClientsIdCompte.as_view()),
+    path('client/<int:pk>/compte/<int:pk>', views.ClientsIdCompteId.as_view()),
 ]

@@ -1,74 +1,66 @@
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from . import serializers
-from api.models import Client
+from api.models import *
 from django_filters import rest_framework as filters
 
 
-class ClientsList(ListAPIView):
+class ClientsList(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAdminUser,)
 
-    @IsAdminUser
+    #@IsAdminUser
     def get(self, request, *args, **kwargs):
         return self.get(self, request, *args, **kwargs)
 
 
-class ClientsId(RetrieveUpdateDestroyAPIView):
+class ClientsId(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAdminUser, IsAuthenticated)
 
-    @IsAuthenticated
+    #@IsAuthenticated
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
 
-    @IsAdminUser
+    #@IsAdminUser
     def put(self, request, *args, **kwargs):
         return self.put(request, *args, **kwargs)
 
-    @IsAdminUser
+    #@IsAdminUser
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
 
-class ClientsIdAdresses(RetrieveUpdateDestroyAPIView):
+class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     permission_classes = (IsAdminUser, IsAuthenticated, )
 
-    @IsAuthenticated
+    #@IsAuthenticated
     def get_queryset(self):
         return Client.objects.filter()
 
-    @IsAdminUser
+    #@IsAdminUser
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
-    @IsAdminUser
+    #@IsAdminUser
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
 
+class ClientsIdCompte(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientsAdresseSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAdminUser, IsAuthenticated,)
 
+    def get_queryset(self):
+        query_courant = Courant.objects.filter()
 
-
-
-
-
-
-
-class ClientsEntrepriseApi(ListAPIView):
-    queryset = Client.objects.filter(type=Client.ENTREPRISE).all()
-    serializer_class = serializers.ClientEntreprise
-
-
-class ClientsParticulierApi(ListAPIView):
-    queryset = Client.objects.filter(type=Client.PARTICULIER).all()
-    serializer_class = serializers.ClientParticulier
-
+class ClientIdCompteId(generics.RetrieveAPIView):
