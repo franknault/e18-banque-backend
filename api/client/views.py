@@ -6,7 +6,7 @@ from api.models import *
 from django_filters import rest_framework as filters
 
 
-class ClientsList(generics.ListAPIView):
+class ClientList(generics.ListCreateAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -16,8 +16,11 @@ class ClientsList(generics.ListAPIView):
     def get_queryset(self):
         return Client.objects.all()
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-class ClientsId(generics.RetrieveUpdateDestroyAPIView):
+
+class ClientId(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -35,7 +38,7 @@ class ClientsId(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
+class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
     queryset = Adresse.objects.all()
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
@@ -57,16 +60,16 @@ class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAP
         return self.post(request, *args, **kwargs)
 
 
-class ClientsIdCompte(generics.RetrieveAPIView):
+class ClientIdCompte(generics.RetrieveAPIView):
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
-        return Courant.objects.filter(pk=self.kwargs['pk'])
+        return Courant.objects.filter(id=self.kwargs['id'])
 
 
-class ClientsIdCompteId(generics.RetrieveAPIView):
+class ClientIdCompteId(generics.RetrieveAPIView):
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAuthenticated, )
@@ -75,3 +78,12 @@ class ClientsIdCompteId(generics.RetrieveAPIView):
         query_courant = Courant.objects.filter()
         return query_courant.filter(pk=self.kwargs['pk_compte'])
 
+
+class ClientSearch(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientSerializer
+    filter_backends = (filters.DjangoFilterBackend, )
+    permission_classes = (IsAdminUser, )
+    #filter_fields = ('telephone', 'type', 'nom_particulier', 'prenom_particulier', 'nom_entreprise', 'numero_entreprise',)
+
+    def get_queryset(self):
+        return Client.objects.filter()

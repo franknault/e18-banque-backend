@@ -3,9 +3,10 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('client', views.ClientsList.as_view()),
-    path('client/<int:pk>', views.ClientsList.as_view()),
-    path('client/<int:pk>/adresse', views.ClientsIdAdresses.as_view()),
-    path('client/<int:pk>/compte', views.ClientsIdCompte.as_view()),
-    path('client/<int:pk>/compte/<int:pk_compte>', views.ClientsIdCompteId.as_view()),
+    path('client', views.ClientList.as_view()),
+    path('client/<int:pk>', views.ClientList.as_view()),
+    path('client/<int:pk>/adresse', views.ClientIdAdresses.as_view()),
+    path('client/<int:pk>/compte', views.ClientIdCompte.as_view()),
+    path('client/<int:pk>/compte/<int:pk_compte>', views.ClientIdCompteId.as_view()),
+    path('client/search?param=x', views.ClientSearch.as_view()),
 ]
