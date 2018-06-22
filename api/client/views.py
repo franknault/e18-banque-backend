@@ -36,7 +36,8 @@ class ClientsId(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView):
+
+class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
@@ -54,6 +55,9 @@ class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
 
 class ClientsIdCompte(generics.RetrieveAPIView):
     serializer_class = serializers.ClientsAdresseSerializer
@@ -64,3 +68,4 @@ class ClientsIdCompte(generics.RetrieveAPIView):
         query_courant = Courant.objects.filter()
 
 class ClientIdCompteId(generics.RetrieveAPIView):
+
