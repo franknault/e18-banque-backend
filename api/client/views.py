@@ -13,8 +13,8 @@ class ClientsList(generics.ListAPIView):
     permission_classes = (IsAdminUser,)
 
     #@IsAdminUser
-    def get(self, request, *args, **kwargs):
-        return self.get(self, request, *args, **kwargs)
+    def get_queryset(self):
+        return Client.objects.all()
 
 
 class ClientsId(generics.RetrieveUpdateDestroyAPIView):
@@ -23,7 +23,6 @@ class ClientsId(generics.RetrieveUpdateDestroyAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAdminUser, IsAuthenticated)
 
-    #@IsAuthenticated
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
 
@@ -36,16 +35,15 @@ class ClientsId(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
-
 class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
-    queryset = Client.objects.all()
+    queryset = Adresse.objects.all()
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     permission_classes = (IsAdminUser, IsAuthenticated, )
 
     #@IsAuthenticated
     def get_queryset(self):
-        return Client.objects.filter()
+        return Adresse.objects.filter(pk=self.kwargs['pk'])
 
     #@IsAdminUser
     def patch(self, request, *args, **kwargs):
@@ -62,10 +60,18 @@ class ClientsIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAP
 class ClientsIdCompte(generics.RetrieveAPIView):
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAdminUser, IsAuthenticated,)
+    permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        return Courant.objects.filter(pk=self.kwargs['pk'])
+
+
+class ClientsIdCompteId(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientsAdresseSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         query_courant = Courant.objects.filter()
-
-class ClientIdCompteId(generics.RetrieveAPIView):
+        return query_courant.filter(pk=self.kwargs['pk_compte'])
 
