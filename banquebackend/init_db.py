@@ -5,18 +5,38 @@ from datetime import date
 def import_db():
     # Info Client
     info_roni = InfoAuthentification.objects.create(username="roni", password="gti525", email="roni@gmail.com")
+    info_roni.set_password(info_roni.password)
+    info_roni.save()
     info_fodil = InfoAuthentification.objects.create(username="fodil", password="gti525", email="fodil@gmail.com")
+    info_fodil.set_password(info_fodil.password)
+    info_fodil.save()
     info_philippe = InfoAuthentification.objects.create(username="philippe", password="gti525", email="philippe@gmail.com")
+    info_philippe.set_password(info_philippe.password)
+    info_philippe.save()
     info_francis = InfoAuthentification.objects.create(username="francis", password="gti525", email="francis@gmail.com")
+    info_francis.set_password(info_francis.password)
+    info_francis.save()
     info_javier = InfoAuthentification.objects.create(username="javier", password="gti525", email="javier@gmail.com")
+    info_javier.set_password(info_javier.password)
+    info_javier.save()
 
     # Info Entreprise
     info_ubisoft = InfoAuthentification.objects.create(username="ubisoft", password="gti525", email="ubisoft@gmail.com")
+    info_ubisoft.set_password(info_ubisoft.password)
+    info_ubisoft.save()
+
     info_metro = InfoAuthentification.objects.create(username="metro", password="gti525", email="metro@gmail.com")
+    info_metro.set_password(info_metro.password)
+    info_metro.save()
+
 
     # Admin
     info_admin = InfoAuthentification.objects.create(username="admin", password="admin", email="admin@gmail.com")
+    info_admin.set_password(info_admin.password)
+    info_admin.save()
     info_root = InfoAuthentification.objects.create(username="root", password="root", email="root@gmail.com")
+    info_root.set_password(info_root.password)
+    info_root.save()
 
     # Client Particulier
     roni = Client.objects.create(nom_particulier="Moufarrej", prenom_particulier="Roni", sexe=Client.HOMME, type=Client.PARTICULIER,
