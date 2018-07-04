@@ -12,6 +12,7 @@ class ComptesList(generics.ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('num_compte', 'id', 'solde', 'date_ouverture', 'date_fermeture')
 
+    # compte/
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
@@ -19,6 +20,7 @@ class ComptesList(generics.ListCreateAPIView):
 class ComptesId(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CompteBasicSerializer
 
+    # compte/:id
     def get_queryset(self):
         return Compte.objects.filter()
 
@@ -28,9 +30,12 @@ class ComptesId(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+    """Il faut rajouter la condition de refuser les methodes"""
+
 
 class ComptesIdTransaction(generics.ListAPIView):
     serializer_class = serializers.CompteTransactionSerializer
 
+    # compte/:id/transaction
     def get_queryset(self):
         return Compte.objects.filter(pk=self.kwargs['pk'])

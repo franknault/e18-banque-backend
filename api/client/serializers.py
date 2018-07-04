@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from api.models import Adresse, Client, Compte, Courant, CarteCredit, Credit, Transaction, TypeTransaction
+from api.compte.serializers import CompteBasicSerializer
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -19,5 +20,13 @@ class ClientsAdresseSerializer(serializers.ModelSerializer):
     adresses = AdresseSerializer(many=True)
 
     class Meta:
-        model = Adresse
-        fields = '__all__'
+        model = Client
+        fields = ('id', 'adresses')
+
+
+class ClientCompteSerializer(serializers.ModelSerializer):
+    compte = CompteBasicSerializer(many=True)
+
+    class Meta:
+        model = Client
+        fields = ('id', 'compte')
