@@ -18,7 +18,6 @@ class ClientList(generics.ListCreateAPIView):
     GET Methode > CHEK
     Route : client    
     """
-    #@IsAdminUser
     def get_queryset(self):
         return Client.objects.all()
 
@@ -27,7 +26,7 @@ class ClientList(generics.ListCreateAPIView):
     Route : client
     """
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        return self.post(request, *args, **kwargs)
 
 
 class ClientId(generics.RetrieveUpdateDestroyAPIView):
@@ -81,7 +80,7 @@ class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPI
     """
     #@IsAdminUser
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        return self.patch(request, *args, **kwargs)
 
     """
     DELETE Methode > CHECK
@@ -106,7 +105,7 @@ class ClientIdCompte(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated, )
 
     """
-    GET Methode
+    GET Methode > CHECK OK
     Route : client/:idClient/compte
     """
     def get_queryset(self):
@@ -120,7 +119,7 @@ class ClientIdCompteId(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated, )
 
     """
-    GET Methode
+    GET Methode > CHECK OK
     Route : client/:idClient/compte/:idCompte
     """
     def get_queryset(self):

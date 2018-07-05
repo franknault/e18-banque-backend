@@ -24,9 +24,22 @@ class ClientsAdresseSerializer(serializers.ModelSerializer):
         fields = ('id', 'adresses')
 
 
+class ClientCourantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Courant
+        fields = '__all__'
+
+
+class ClientCreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Credit
+        fields = '__all__'
+
+
 class ClientCompteSerializer(serializers.ModelSerializer):
-    compte = CompteBasicSerializer(many=True)
+    courant = ClientCourantSerializer()
+    credit = ClientCreditSerializer()
 
     class Meta:
-        model = Client
-        fields = ('id', 'compte')
+        model = Compte
+        fields = ('id', 'courant', 'credit')

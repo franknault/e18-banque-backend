@@ -99,7 +99,6 @@ class Compte(models.Model):
     solde = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     date_ouverture = models.DateTimeField(auto_now_add=True)
     date_fermeture = models.DateTimeField(null=True)
-    client_courant = models.ForeignKey(Client, related_name='compte', on_delete=models.CASCADE)
 
     def has_enough_solde(self, montant):
         return self.solde.__ge__(montant)
@@ -109,6 +108,7 @@ class Compte(models.Model):
 
     class Meta:
         db_table = 'compte'
+        verbose_name = 'compte'
 
 
 class Courant(Compte):
