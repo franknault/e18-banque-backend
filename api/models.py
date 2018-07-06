@@ -8,7 +8,7 @@ class InfoAuthentification(AbstractUser):
     id = models.AutoField(primary_key=True)
 
     def __str__(self):
-        return self.email
+        return self.id
 
 
 class Administrateur(models.Model):
@@ -37,7 +37,7 @@ class Client(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    info_authentification = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    info_authentification = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=11)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     nom_particulier = models.CharField(max_length=50, null=True, blank=True)
@@ -198,7 +198,8 @@ class Transaction(models.Model):
     etat = models.CharField(max_length=3, choices=ETAT_CHOICES)
 
     def __str__(self):
-        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte, self.etat,self.type_transaction.get_type_display())
+        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte,
+                                                self.etat, self.type_transaction.get_type_display())
 
     class Meta:
         db_table = 'transaction'

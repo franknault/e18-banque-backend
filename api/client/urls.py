@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from api.client.views import *
 from django.urls import include, path
+from . import views
+
 
 urlpatterns = [
     url(r'^clients/entreprises$', ClientsEntrepriseApi.as_view()),
