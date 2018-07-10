@@ -39,12 +39,12 @@ def update_num_compte(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Client)
-def generate_compte(sender, instance, **kwargs):
+def generate_compte(sender, instance, created, **kwargs):
     """ Génère les comptes lors de la création d'un client """
-
-    client = Client.objects.get(id=instance.id)
-    create_courant(client)
-    create_credit(client)
+    if created:
+        client = Client.objects.get(id=instance.id)
+        create_courant(client)
+        create_credit(client)
 
 
 def create_courant(client):

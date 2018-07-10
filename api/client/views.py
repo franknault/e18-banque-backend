@@ -44,7 +44,6 @@ class ClientsApi(CreateAPIView):
     def post(self, request, *args, **kwargs):
 
         info = InfoAuthentification.objects.create_user(username=request.data['username'], email=request.data['email'], password=request.data['password'])
-        info.set_password(info.password)
         info.save()
 
         token = Token.objects.create(user=info)
