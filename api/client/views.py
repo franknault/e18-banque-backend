@@ -1,5 +1,4 @@
 from rest_framework.generics import ListAPIView
-from . import serializers
 from .serializers import *
 from api.models import *
 from . import serializers
@@ -7,14 +6,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.mixins import CreateModelMixin
+from rest_framework import status
 
-
-"""class ClientsApi(ListAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
-
-"""
 
 class ClientsEntrepriseApi(ListAPIView):
     queryset = Client.objects.filter(type=Client.ENTREPRISE).all()
@@ -49,14 +42,9 @@ class ClientsApi(CreateAPIView):
         token = Token.objects.create(user=info)
         token.save()
 
-        request.data['info_authentification'] = info.pk
         client = Client.objects.create(nom_particulier=request.data['nom_particulier'], prenom_particulier=request.data['prenom_particulier'], sexe=request.data['sexe'],
                               nom_entreprise=request.data['nom_entreprise'], numero_entreprise=request.data['numero_entreprise'],
                               type=request.data['type'], telephone=request.data['telephone'], date_naissance=request.data['date_naissance'], info_authentification=info)
         client.save()
 
-
-        return Response({"Message": "Client est creer :)"})
-
-
-"""return Response({"Message": "L'utilisateur ne peut être créer."}, status.HTTP_412_PRECONDITION_FAILED)"""
+        return Response({"Message": "L'utilisateur a été créé"}, status.HTTP_201_CREATED)

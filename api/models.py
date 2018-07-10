@@ -198,8 +198,7 @@ class Transaction(models.Model):
     etat = models.CharField(max_length=3, choices=ETAT_CHOICES)
 
     def __str__(self):
-        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte,
-                                                self.etat, self.type_transaction.get_type_display())
+        return '%s, DE : %s, À : %s, %s, %s' % (self.id, self.compte.num_compte, self.transaction.compte.num_compte, self.etat, self.type_transaction.get_type_display())
 
     class Meta:
         db_table = 'transaction'
