@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import *
+from api.compte.serializers import CompteBasicSerializer
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -27,13 +28,36 @@ class ClientSerializerNom(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ClientEntreprise(serializers.ModelSerializer):
+class AdresseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
-        fields = ('id', 'telephone', 'nom_entreprise', 'numero_entreprise')
+        model = Adresse
+        fields = '__all__'
 
 
-class ClientParticulier(serializers.ModelSerializer):
+class ClientsAdresseSerializer(serializers.ModelSerializer):
+    adresses = AdresseSerializer(many=True)
+
     class Meta:
         model = Client
-        fields = ('id', 'telephone', 'nom_particulier', 'prenom_particulier', 'sexe')
+        fields = ('id', 'adresses')
+
+
+class ClientCourantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Courant
+        fields = '__all__'
+
+
+class ClientCreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Credit
+        fields = '__all__'
+
+
+class ClientCompteSerializer(serializers.ModelSerializer):
+    courant = ClientCourantSerializer()
+    credit = ClientCreditSerializer()
+
+    class Meta:
+        model = Compte
+        fields = ('id', 'courant', 'credit')

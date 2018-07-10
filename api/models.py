@@ -108,6 +108,7 @@ class Compte(models.Model):
 
     class Meta:
         db_table = 'compte'
+        verbose_name = 'compte'
 
 
 class Courant(Compte):
@@ -202,3 +203,4 @@ class Transaction(models.Model):
 
     class Meta:
         db_table = 'transaction'
+
