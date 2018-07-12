@@ -1,3 +1,9 @@
+from rest_framework.generics import ListAPIView
+from .serializers import *
+from api.models import *
+from rest_framework.generics import CreateAPIView
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -132,6 +138,36 @@ class ClientSearch(generics.RetrieveAPIView):
     filter_backends = (filters.DjangoFilterBackend, )
     permission_classes = (IsAdminUser, )
     #filter_fields = ('telephone', 'type', 'nom_particulier', 'prenom_particulier', 'nom_entreprise', 'numero_entreprise',)
-
     def get_queryset(self):
         return Client.objects.filter()
+
+      
+class ClientsApi(CreateAPIView):
+    queryset = Client.objects.all()
+    permission_classes = (IsAdminUser,)
+    serializer_class = serializers.ClientSerializerNom
+
+    """
+    GET Method
+    Route : client/
+    """
+
+    """
+    POST Method
+    Route : client/
+    """
+
+    def post(self, request, *args, **kwargs):
+
+        info = InfoAuthentification.objects.create_user(username=request.data['username'], email=request.data['email'], password=request.data['password'])
+        info.save()
+
+        token = Token.objects.create(user=info)
+        token.save()
+
+        client = Client.objects.create(nom_particulier=request.data['nom_particulier'], prenom_particulier=request.data['prenom_particulier'], sexe=request.data['sexe'],
+                              nom_entreprise=request.data['nom_entreprise'], numero_entreprise=request.data['numero_entreprise'],
+                              type=request.data['type'], telephone=request.data['telephone'], date_naissance=request.data['date_naissance'], info_authentification=info)
+        client.save()
+
+        return Response({"Message": "L'utilisateur a été créé"}, status.HTTP_201_CREATED)
