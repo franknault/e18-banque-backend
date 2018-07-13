@@ -12,29 +12,6 @@ from api.models import *
 from django_filters import rest_framework as filters
 
 
-class ClientList(generics.ListCreateAPIView):
-    """API pour créer un client et obtenir la liste des clients"""
-
-    queryset = Client.objects.all()
-    serializer_class = serializers.ClientSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAdminUser,)
-
-    """
-    GET Methode > CHEK
-    Route : client    
-    """
-    def get_queryset(self):
-        return Client.objects.all()
-
-    """
-    POST Methode
-    Route : client
-    """
-    def post(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
-
-
 class ClientId(generics.RetrieveUpdateDestroyAPIView):
     """API de gestion d'un client """
     queryset = Client.objects.all()
@@ -138,11 +115,12 @@ class ClientSearch(generics.RetrieveAPIView):
     filter_backends = (filters.DjangoFilterBackend, )
     permission_classes = (IsAdminUser, )
     #filter_fields = ('telephone', 'type', 'nom_particulier', 'prenom_particulier', 'nom_entreprise', 'numero_entreprise',)
+
     def get_queryset(self):
         return Client.objects.filter()
 
       
-class ClientsApi(CreateAPIView):
+class ClientsApi(generics.ListCreateAPIView):
     queryset = Client.objects.all()
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.ClientSerializerNom
@@ -151,6 +129,10 @@ class ClientsApi(CreateAPIView):
     GET Method
     Route : client/
     """
+
+    def get_queryset(self):
+        #return Client.objects.all().prefetch_related('info_authentification')
+        return Client.objects.all()
 
     """
     POST Method

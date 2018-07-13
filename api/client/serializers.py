@@ -21,7 +21,7 @@ class ClientSerializerNom(serializers.ModelSerializer):
     username = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
     password = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
     email = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
-    info_authentification = serializers.IntegerField(allow_null=True)
+    info_authentification = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Client

@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
     path('client', views.ClientsApi.as_view()),
     path('rest-auth/', include('rest_auth.urls')),
-    path('client', views.ClientList.as_view()),
     path('client/<int:pk>', views.ClientId.as_view()),
     path('client/<int:pk>/adresse', views.ClientIdAdresses.as_view()),
     path('client/<int:pk>/compte', views.ClientIdCompte.as_view()),
