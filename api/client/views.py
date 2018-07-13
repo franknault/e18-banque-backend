@@ -162,9 +162,6 @@ class ClientsApi(CreateAPIView):
         info = InfoAuthentification.objects.create_user(username=request.data['username'], email=request.data['email'], password=request.data['password'])
         info.save()
 
-        token = Token.objects.create(user=info)
-        token.save()
-
         client = Client.objects.create(nom_particulier=request.data['nom_particulier'], prenom_particulier=request.data['prenom_particulier'], sexe=request.data['sexe'],
                               nom_entreprise=request.data['nom_entreprise'], numero_entreprise=request.data['numero_entreprise'],
                               type=request.data['type'], telephone=request.data['telephone'], date_naissance=request.data['date_naissance'], info_authentification=info)

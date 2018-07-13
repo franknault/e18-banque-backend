@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
                 ('date_naissance', models.DateField(blank=True, null=True)),
                 ('nom_entreprise', models.CharField(blank=True, max_length=50, null=True)),
                 ('numero_entreprise', models.CharField(blank=True, max_length=50, null=True)),
-                ('info_authentification', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('info_authentification', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'client',
@@ -113,6 +113,7 @@ class Migration(migrations.Migration):
                 ('date_fermeture', models.DateTimeField(null=True)),
             ],
             options={
+                'verbose_name': 'compte',
                 'db_table': 'compte',
             },
         ),
@@ -190,11 +191,6 @@ class Migration(migrations.Migration):
             model_name='transaction',
             name='type_transaction',
             field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='api.TypeTransaction'),
-        ),
-        migrations.AddField(
-            model_name='compte',
-            name='client_courant',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='compte', to='api.Client'),
         ),
         migrations.AddField(
             model_name='adresse',
