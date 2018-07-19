@@ -1,10 +1,13 @@
 from django.conf.urls import url
-from api.client.views import *
 from django.urls import include, path
+from . import views
 
 urlpatterns = [
-    url(r'^clients/entreprises$', ClientsEntrepriseApi.as_view()),
-    url(r'^clients/particuliers$', ClientsParticulierApi.as_view()),
-    url(r'^clients$', ClientsApi.as_view()),
-    path('rest-auth/', include('rest_auth.urls'))
+    path('client', views.ClientsApi.as_view()),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('client/<int:pk>', views.ClientId.as_view()),
+    path('client/<int:pk>/adresse', views.ClientIdAdresses.as_view()),
+    path('client/<int:pk>/compte', views.ClientIdCompte.as_view()),
+    path('client/<int:pk>/compte/<int:pk_compte>', views.ClientIdCompteId.as_view()),
+    path('client/search?param=x', views.ClientSearch.as_view()),
 ]
