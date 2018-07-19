@@ -31,14 +31,15 @@ class TransfertVirement(generics.CreateAPIView):
         montant = Decimal(serializer.data['montant'])
         api_key = serializer.data['cle_api']
 
+        if api_key != settings.ANALYTIQUE_API_KEY:
+            return Response({"Message": "Vous n'êtes pas autorisé à modifier cette transaction."}, status.HTTP_401_UNAUTHORIZED)
+
         if cpt_dest == cpt_prov:
             return Response({'Détail': 'Le compte de destination ne peut être identique au compte de provenance.'}, status.HTTP_400_BAD_REQUEST)
 
         if not Courant.objects.filter(num_compte=cpt_dest).exists() or not Courant.objects.filter(num_compte=cpt_prov).exists():
             return Response({'Détail': 'Compte de destination ou de provenance introuvable.'}, status.HTTP_400_BAD_REQUEST)
 
-        if api_key != settings.ANALYTIQUE_API_KEY:
-            return Response({"Message": "Vous n'êtes pas autorisé à modifier cette transaction."}, status.HTTP_401_UNAUTHORIZED)
 
         cpt_prov = Courant.objects.get(num_compte=cpt_prov)
         cpt_dest = Courant.objects.get(num_compte=cpt_dest)
