@@ -27,6 +27,7 @@ SECRET_KEY = 'h@=kjy4l@%d4geph-@rw(xegmvp#03cmy2ln5&y0-3cphhe&an'
 
 # API KEY: Clé d'api pour le service de passerelle
 PASSERELLE_API_KEY = '12345'
+ANALYTIQUE_API_KEY = '12345'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

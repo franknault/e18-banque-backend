@@ -7,6 +7,7 @@ class TransfertVirementSerializer(serializers.Serializer):
     cpt_prov = serializers.CharField(min_length=8, max_length=8)
     cpt_dest = serializers.CharField(min_length=8, max_length=8)
     montant = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0.00)
+    cle_api = serializers.CharField()
 
 
 class TransfertRemboursementSerializer(serializers.Serializer):
