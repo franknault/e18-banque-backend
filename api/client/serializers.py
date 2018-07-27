@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from api.models import *
-from api.compte.serializers import CompteBasicSerializer
 
 
 class ClientSerializer(serializers.ModelSerializer):
