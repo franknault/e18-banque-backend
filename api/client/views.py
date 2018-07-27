@@ -17,7 +17,7 @@ class ClientId(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAdminUser, IsAuthenticated)
+    permission_classes = (IsAdminUser, )
 
     """
     GET Methode > CHEK
@@ -47,13 +47,12 @@ class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPI
     """API de gestion d'adresses pour un client"""
     serializer_class = serializers.ClientsAdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
-    permission_classes = (IsAdminUser, IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
 
     """
     GET Methode > CHECK
     Route : client/:idClient/adresse
     """
-    #@IsAuthenticated
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
 
@@ -61,7 +60,6 @@ class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPI
     PATCH Methode > CHECK
     Route : client/:idClient/adresse
     """
-    #@IsAdminUser
     def patch(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
 
@@ -69,7 +67,6 @@ class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPI
     DELETE Methode > CHECK
     Route : client/:idClient/adresse
     """
-    #@IsAdminUser
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
@@ -85,7 +82,7 @@ class ClientIdCompte(generics.RetrieveAPIView):
     """"API de gestion de compte pour un client"""
     serializer_class = serializers.ClientCompteSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
 
     """
     GET Methode > CHECK OK
@@ -99,7 +96,7 @@ class ClientIdCompteId(generics.RetrieveAPIView):
     """API de gestion d'un id de compte par rapport a un client"""
     serializer_class = serializers.ClientCompteSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
 
     """
     GET Methode > CHECK OK
@@ -114,7 +111,6 @@ class ClientSearch(generics.RetrieveAPIView):
     serializer_class = serializers.ClientSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     permission_classes = (IsAdminUser, )
-    #filter_fields = ('telephone', 'type', 'nom_particulier', 'prenom_particulier', 'nom_entreprise', 'numero_entreprise',)
 
     def get_queryset(self):
         return Client.objects.filter()
@@ -124,21 +120,17 @@ class ClientsApi(generics.ListCreateAPIView):
     queryset = Client.objects.all()
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.ClientSerializerNom
-
     """
     GET Method
-    Route : client/
+    Route : /admin/client/
     """
-
     def get_queryset(self):
-        #return Client.objects.all().prefetch_related('info_authentification')
         return Client.objects.all()
 
     """
     POST Method
-    Route : client/
+    Route : /admin/client/
     """
-
     def post(self, request, *args, **kwargs):
 
         info = InfoAuthentification.objects.create_user(username=request.data['username'], email=request.data['email'], password=request.data['password'])
@@ -150,3 +142,59 @@ class ClientsApi(generics.ListCreateAPIView):
         client.save()
 
         return Response({"Message": "L'utilisateur a été créé"}, status.HTTP_201_CREATED)
+
+
+"""
+Section API pour client en BAS
+"""
+
+
+class ClientProfile(generics.RetrieveAPIView):
+    """API de gestion d'un client """
+    serializer_class = serializers.ClientSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated, )
+
+    """
+        GET Method
+        Route : client/
+        """
+    def get_object(self):
+        queryset = Client.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        return queryset.get(info_authentification=info)
+
+
+class ClientCompte(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientCompteSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated, )
+
+    """
+        GET Method
+        Route : client/compte
+    """
+    def get_object(self):
+        queryset = Compte.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        return queryset.get(id=client.id)
+
+
+class ClientAdresse(generics.RetrieveAPIView):
+    serializer_class = serializers.AdresseSerializer
+    filter_backends = (filters.DjangoFilterBackend, )
+    permission_classes = (IsAuthenticated, )
+
+    """
+        GET Method
+        Route : client/adresse
+    """
+    def get_object(self):
+        queryset = Adresse.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        return queryset.get(client=client.id)

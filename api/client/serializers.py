@@ -35,11 +35,11 @@ class AdresseSerializer(serializers.ModelSerializer):
 
 
 class ClientsAdresseSerializer(serializers.ModelSerializer):
-    adresses = AdresseSerializer(many=True)
+    adresse = AdresseSerializer(many=True)
 
     class Meta:
-        model = Client
-        fields = ('id', 'adresses')
+        model = Adresse
+        fields = ('client_id', )
 
 
 class ClientCourantSerializer(serializers.ModelSerializer):
