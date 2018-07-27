@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters import rest_framework as filters
-
+from rest_framework.permissions import *
 from api.models import *
 from . import serializers
 
@@ -11,6 +11,7 @@ class ComptesList(generics.ListCreateAPIView):
     serializer_class = serializers.CompteBasicSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('num_compte', 'id', 'solde', 'date_ouverture', 'date_fermeture')
+    permission_classes = (IsAdminUser,)
 
     # compte/
     def post(self, request, *args, **kwargs):
@@ -19,6 +20,7 @@ class ComptesList(generics.ListCreateAPIView):
 
 class ComptesId(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CompteBasicSerializer
+    permission_classes = (IsAdminUser,)
 
     # compte/:id
     def get_queryset(self):
@@ -35,6 +37,7 @@ class ComptesId(generics.RetrieveUpdateDestroyAPIView):
 
 class ComptesIdTransaction(generics.ListAPIView):
     serializer_class = serializers.CompteTransactionSerializer
+    permission_classes = (IsAdminUser,)
 
     # compte/:id/transaction
     def get_queryset(self):
