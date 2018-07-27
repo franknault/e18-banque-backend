@@ -5,23 +5,19 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import status
 from django.http import JsonResponse
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from django_filters import rest_framework as filters
 
 
 class TransactionsList(generics.ListCreateAPIView):
 
-    permission_classes = (IsAdminUser,)
-    """
-    GET Method
-    Route : transaction/
-    """
-
     queryset = Transaction.objects.all()
     serializer_class = serializers.TransactionSerializer
+    permission_classes = (IsAdminUser, )
 
     """
     POST Method
-    Route : transaction/
+    Route : admin/transaction/
     """
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -98,7 +94,7 @@ class TransactionId(RetrieveUpdateDestroyAPIView):
 
     """
     GET Method
-    Route : transaction/:id/
+    Route : admin/transaction/:id/
     """
 
     def get(self, request, *args, **kwargs):
@@ -176,3 +172,44 @@ class TransactionId(RetrieveUpdateDestroyAPIView):
         if request.method == 'OPTIONS':
             return JsonResponse({'État': "échoué", 'message': "L'opération OPTIONS n'est pas supporté"}, status=403)
 
+
+"""
+Section API pour client en BAS
+"""
+
+
+class TransactionCompte(generics.RetrieveAPIView):
+    serializer_class = serializers.TransactionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated,)
+
+    """
+            GET Method
+            Route : client/transaction
+    """
+    def get_object(self):
+        queryset = Transaction.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        compte = Compte.objects.get(id=client.id)
+        return Transaction.objects.filter(pk=compte.id)
+
+
+class TransactionCourant(generics.RetrieveAPIView):
+    serializer_class = serializers.TransactionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated,)
+
+    """
+            GET Method
+            Route : client/transaction
+    """
+
+    def get_object(self):
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        compte = Compte.objects.get(id=client.id)
+        queryset = Transaction.objects.filter()
+        return queryset.get(pk=compte.id)
