@@ -21,14 +21,14 @@ class ClientId(generics.RetrieveUpdateDestroyAPIView):
 
     """
     GET Methode > CHEK
-    Route : client/:idClient
+    Route : admin/client/:idClient
     """
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
 
     """
     PUT Methode > CHEK
-    Route : client/:idClient
+    Route : admin/client/:idClient
     """
     #@IsAdminUser
     def put(self, request, *args, **kwargs):
@@ -36,7 +36,7 @@ class ClientId(generics.RetrieveUpdateDestroyAPIView):
 
     """
     DELETE Methode
-    Route : client/:idClient
+    Route : admin/client/:idClient
     """
     #@IsAdminUser
     def delete(self, request, *args, **kwargs):
@@ -51,28 +51,28 @@ class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPI
 
     """
     GET Methode > CHECK
-    Route : client/:idClient/adresse
+    Route : admin/client/:idClient/adresse
     """
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
 
     """
     PATCH Methode > CHECK
-    Route : client/:idClient/adresse
+    Route : admin/client/:idClient/adresse
     """
     def patch(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
 
     """
     DELETE Methode > CHECK
-    Route : client/:idClient/adresse
+    Route : admin/client/:idClient/adresse
     """
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
     """
     POST Methode 
-    Route : client/:idClient/adresse
+    Route : admin/client/:idClient/adresse
     """
     def post(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
@@ -86,7 +86,7 @@ class ClientIdCompte(generics.RetrieveAPIView):
 
     """
     GET Methode > CHECK OK
-    Route : client/:idClient/compte
+    Route : admin/client/:idClient/compte
     """
     def get_queryset(self):
         return Client.objects.filter(pk=self.kwargs['pk'])
@@ -100,7 +100,7 @@ class ClientIdCompteId(generics.RetrieveAPIView):
 
     """
     GET Methode > CHECK OK
-    Route : client/:idClient/compte/:idCompte
+    Route : admin/client/:idClient/compte/:idCompte
     """
     def get_queryset(self):
         query_courant = Courant.objects.filter()
@@ -122,14 +122,14 @@ class ClientsApi(generics.ListCreateAPIView):
     serializer_class = serializers.ClientSerializerNom
     """
     GET Method
-    Route : /admin/client/
+    Route : admin/client/
     """
     def get_queryset(self):
         return Client.objects.all()
 
     """
     POST Method
-    Route : /admin/client/
+    Route : admin/client/
     """
     def post(self, request, *args, **kwargs):
 
