@@ -10,7 +10,6 @@ from django_filters import rest_framework as filters
 
 
 class TransactionsList(generics.ListCreateAPIView):
-
     queryset = Transaction.objects.all()
     serializer_class = serializers.TransactionSerializer
     permission_classes = (IsAdminUser, )
@@ -86,9 +85,7 @@ class TransactionsList(generics.ListCreateAPIView):
 
 
 class TransactionId(RetrieveUpdateDestroyAPIView):
-
     permission_classes = (IsAdminUser,)
-
     queryset = Transaction.objects.all()
     serializer_class = serializers.TransactionSerializer
 
@@ -178,38 +175,18 @@ Section API pour client en BAS
 """
 
 
-class TransactionCompte(generics.RetrieveAPIView):
+class TransactionCompte(generics.ListAPIView):
     serializer_class = serializers.TransactionSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAuthenticated,)
-
     """
             GET Method
             Route : client/transaction
     """
-    def get_object(self):
-        queryset = Transaction.objects.filter()
+    def get_queryset(self):
+        queryset = Transaction.objects.all()
         user = self.request.user
         info = InfoAuthentification.objects.get(username=user.username)
         client = Client.objects.get(info_authentification=info)
         compte = Compte.objects.get(id=client.id)
-        return Transaction.objects.filter(pk=compte.id)
-
-
-class TransactionCourant(generics.RetrieveAPIView):
-    serializer_class = serializers.TransactionSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (IsAuthenticated,)
-
-    """
-            GET Method
-            Route : client/transaction
-    """
-
-    def get_object(self):
-        user = self.request.user
-        info = InfoAuthentification.objects.get(username=user.username)
-        client = Client.objects.get(info_authentification=info)
-        compte = Compte.objects.get(id=client.id)
-        queryset = Transaction.objects.filter()
-        return queryset.get(pk=compte.id)
+        return queryset.filter(compte_id=compte.id)
