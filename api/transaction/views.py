@@ -189,5 +189,6 @@ class TransactionCompte(generics.ListAPIView):
         print(user.username)
         info = InfoAuthentification.objects.get(username=user.username)
         client = Client.objects.get(info_authentification=info)
-        compte = Compte.objects.get(id=client.id)
-        return queryset.filter(compte_id=compte.id)
+        courant = Courant.objects.get(client_id=client.id)
+        credit = Credit.objects.get(client_id=client.id)
+        return queryset.filter(compte_id__in=[courant.id, credit.id])
