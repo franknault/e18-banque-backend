@@ -5,13 +5,13 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import status
 from django.http import JsonResponse
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import *
 from django_filters import rest_framework as filters
 
 
 class TransactionsList(generics.ListCreateAPIView):
     queryset = Transaction.objects.all()
-    serializer_class = serializers.TransactionSerializer
+    serializer_class = serializers.TransactionSerializerAdmin
     permission_classes = (IsAdminUser, )
 
     """
@@ -87,7 +87,7 @@ class TransactionsList(generics.ListCreateAPIView):
 class TransactionId(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
     queryset = Transaction.objects.all()
-    serializer_class = serializers.TransactionSerializer
+    serializer_class = serializers.TransactionSerializerAdmin
 
     """
     GET Method
