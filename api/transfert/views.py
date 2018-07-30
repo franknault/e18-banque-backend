@@ -49,6 +49,7 @@ class TransfertVirement(generics.CreateAPIView):
 
         trx_prov = Transaction.objects.create(type_transaction=type_trx,
                                               compte=cpt_prov,
+                                              date_fin=localtime(timezone.now()),
                                               montant=montant.copy_negate(),
                                               solde_avant=cpt_prov.solde,
                                               solde_apres=cpt_prov.solde - montant,
@@ -59,6 +60,7 @@ class TransfertVirement(generics.CreateAPIView):
 
         trx_dest = Transaction.objects.create(type_transaction=type_trx,
                                               compte=cpt_dest,
+                                              date_fin=localtime(timezone.now()),
                                               trx_id=trx_prov.id,
                                               montant=montant,
                                               solde_avant=cpt_dest.solde,
