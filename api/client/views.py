@@ -183,6 +183,41 @@ class ClientCompte(generics.RetrieveAPIView):
         return queryset.get(id=client.id)
 
 
+class ClientCompteCredit(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientCreditSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated, )
+
+    """
+        GET Method
+        Route : client/compte
+    """
+    def get_object(self):
+        queryset = Credit.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        print(client.id)
+        return queryset.get(client_id=client.id)
+
+
+class ClientCompteCourant(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientCourantSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated, )
+
+    """
+        GET Method
+        Route : client/compte
+    """
+    def get_object(self):
+        queryset = Courant.objects.filter()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        return queryset.get(client_id=client.id)
+
+
 class ClientAdresse(generics.RetrieveAPIView):
     serializer_class = serializers.AdresseSerializer
     filter_backends = (filters.DjangoFilterBackend, )
