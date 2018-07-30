@@ -186,6 +186,7 @@ class TransactionCompte(generics.ListAPIView):
     def get_queryset(self):
         queryset = Transaction.objects.all()
         user = self.request.user
+        print(user.username)
         info = InfoAuthentification.objects.get(username=user.username)
         client = Client.objects.get(info_authentification=info)
         compte = Compte.objects.get(id=client.id)
