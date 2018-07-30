@@ -1,0 +1,20 @@
+Collecting paramiko
+  Downloading https://files.pythonhosted.org/packages/3e/db/cb7b6656e0e7387637ce850689084dc0b94b44df31cc52e5fc5c2c4fd2c1/paramiko-2.4.1-py2.py3-none-any.whl (194kB)
+Requirement already satisfied: pyasn1>=0.1.7 in /usr/lib/python3/dist-packages (from paramiko) (0.4.2)
+Requirement already satisfied: cryptography>=1.5 in /usr/lib/python3/dist-packages (from paramiko) (2.1.4)
+Collecting pynacl>=1.0.1 (from paramiko)
+  Downloading https://files.pythonhosted.org/packages/77/03/927e4cdbd821f929392608ddb2220a9548ce164c52047e90fadd20786fd8/PyNaCl-1.2.1-cp36-cp36m-manylinux1_x86_64.whl (692kB)
+Collecting bcrypt>=3.1.3 (from paramiko)
+  Downloading https://files.pythonhosted.org/packages/b8/09/905ec939994e2c49dcffff72f823802557f166b3815ea54c1db3671eed42/bcrypt-3.1.4-cp36-cp36m-manylinux1_x86_64.whl (54kB)
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (from pynacl>=1.0.1->paramiko) (1.11.0)
+Collecting cffi>=1.4.1 (from pynacl>=1.0.1->paramiko)
+  Downloading https://files.pythonhosted.org/packages/6d/c0/47db8f624f3e4e2f3f27be03a93379d1ba16a1450a7b1aacfa0366e2c0dd/cffi-1.11.5-cp36-cp36m-manylinux1_x86_64.whl (421kB)
+Collecting pycparser (from cffi>=1.4.1->pynacl>=1.0.1->paramiko)
+  Downloading https://files.pythonhosted.org/packages/8c/2d/aad7f16146f4197a11f8e91fb81df177adcc2073d36a17b1491fd09df6ed/pycparser-2.18.tar.gz (245kB)
+Building wheels for collected packages: pycparser
+  Running setup.py bdist_wheel for pycparser: started
+  Running setup.py bdist_wheel for pycparser: finished with status 'done'
+  Stored in directory: /root/.cache/pip/wheels/c0/a1/27/5ba234bd77ea5a290cbf6d675259ec52293193467a12ef1f46
+Successfully built pycparser
+Installing collected packages: pycparser, cffi, pynacl, bcrypt, paramiko
+Successfully installed bcrypt-3.1.4 cffi-1.11.5 paramiko-2.4.1 pycparser-2.18 pynacl-1.2.1
