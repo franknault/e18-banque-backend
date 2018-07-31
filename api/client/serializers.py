@@ -39,13 +39,19 @@ class ClientsAdresseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Adresse
-        fields = ('adresses',  )
+        fields = ('adresses',)
 
 
 class ClientCourantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Courant
         fields = '__all__'
+
+
+class ClientEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InfoAuthentification
+        fields = ('email',)
 
 
 class ClientCarteCreditSerializer(serializers.ModelSerializer):

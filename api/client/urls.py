@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('client', views.ClientProfile.as_view()),
+    path('client/email', views.ClientEmail.as_view()),
     path('client/compte', views.ClientCompte.as_view()),
     path('client/compte/credit', views.ClientCompteCredit.as_view()),
     path('client/compte/courant', views.ClientCompteCourant.as_view()),
