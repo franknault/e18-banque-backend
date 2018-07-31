@@ -85,7 +85,61 @@ class TransfertPaiement(generics.CreateAPIView):
     """
     def post(self, request, *args, **kwargs):
         type_trx = TypeTransaction.objects.get(type=TypeTransaction.PAIEMENTDEDEBITACREDIT)
-        return Response({"Message": "Transfert de Débit à Crédit"}, status.HTTP_201_CREATED)
+        serializer = TransfertPaiementSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response({'Détail': 'Le body de la requête est invalide.'}, status.HTTP_400_BAD_REQUEST)
+
+        cpt_dest = serializer.data['cpt_dest']
+        cpt_prov = serializer.data['cpt_prov']
+        montant = Decimal(serializer.data['montant'])
+
+        if not Credit.objects.filter(num_compte=cpt_dest):
+            return Response({'Détail': 'Veuillez choisir un compte crédit.'}, status.HTTP_400_BAD_REQUEST)
+
+        if not Courant.objects.filter(num_compte=cpt_prov):
+            return Response({'Détail': 'Veuillez choisir un compte débit.'}, status.HTTP_400_BAD_REQUEST)
+
+        if cpt_dest == cpt_prov:
+            return Response({'Détail': 'Le compte de destination ne peut être identique au compte de provenance.'}, status.HTTP_400_BAD_REQUEST)
+
+        if not Credit.objects.filter(num_compte=cpt_dest).exists() or not Courant.objects.filter(num_compte=cpt_prov).exists():
+            return Response({'Détail': 'Compte de destination ou de provenance introuvable.'}, status.HTTP_400_BAD_REQUEST)
+
+        cpt_prov = Courant.objects.get(num_compte=cpt_prov)
+        cpt_dest = Credit.objects.get(num_compte=cpt_dest)
+
+        if cpt_prov.client != cpt_dest.client:
+                return Response({'Détail': 'Compte crédit et compte débit ont deux utilisateurs différents'})
+
+        if not cpt_prov.has_enough_solde(montant=montant):
+            return Response({'Détail': 'Solde insuffisant dans le compte de provenance'}, status.HTTP_400_BAD_REQUEST)
+
+        trx_prov = Transaction.objects.create(type_transaction=type_trx,
+                                              compte=cpt_prov,
+                                              montant=montant.copy_negate(),
+                                              solde_avant=cpt_prov.solde,
+                                              solde_apres=cpt_prov.solde - montant,
+                                              etat=Transaction.ACCEPTE)
+
+        cpt_prov.solde = trx_prov.solde_apres
+        cpt_prov.save()
+
+        trx_dest = Transaction.objects.create(type_transaction=type_trx,
+                                              compte=cpt_dest,
+                                              trx_id=trx_prov.id,
+                                              montant=montant,
+                                              solde_avant=cpt_dest.solde,
+                                              solde_apres=cpt_dest.solde - montant,
+                                              etat=Transaction.ACCEPTE)
+
+        trx_prov.trx = trx_dest
+        trx_prov.save()
+
+        cpt_dest.solde = trx_dest.solde_apres
+        cpt_dest.save()
+
+        return Response({'ID': trx_prov.id}, status.HTTP_201_CREATED)
 
 
 class TransfertAchat(generics.CreateAPIView):
