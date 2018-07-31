@@ -69,6 +69,6 @@ def create_credit_card(client):
     security_code = fake.credit_card_security_code(card_type='visa16')
     card_number = fake.credit_card_number(card_type='visa16')
 
-    card = CarteCredit.objects.create(nom_titulaire=client.full_name, annee_expiration=expire_year,
+    card = CarteCredit.objects.create(nom_titulaire=client.full_name(), annee_expiration=expire_year,
                                       mois_expiration=expire_month, cvv=security_code, num_carte=card_number)
     return card

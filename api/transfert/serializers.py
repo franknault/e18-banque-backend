@@ -20,6 +20,12 @@ class TransfertRemboursementSerializer(serializers.Serializer):
     montant = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0.00)
 
 
+class TransfertPaiementSerializer(serializers.Serializer):
+    cpt_prov = serializers.CharField(min_length=8, max_length=8)
+    cpt_dest = serializers.CharField(min_length=8, max_length=8)
+    montant = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=0.00)
+
+
 class TransfertAchatSerializer(serializers.Serializer):
     crt_num = serializers.CharField(min_length=16, max_length=16)
     crt_exp = serializers.CharField(min_length=5, max_length=5)

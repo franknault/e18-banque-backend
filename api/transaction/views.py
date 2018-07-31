@@ -186,8 +186,42 @@ class TransactionCompte(generics.ListAPIView):
     def get_queryset(self):
         queryset = Transaction.objects.all()
         user = self.request.user
-        print(user.username)
         info = InfoAuthentification.objects.get(username=user.username)
         client = Client.objects.get(info_authentification=info)
-        compte = Compte.objects.get(id=client.id)
-        return queryset.filter(compte_id=compte.id)
+        courant = Courant.objects.get(client_id=client.id)
+        credit = Credit.objects.get(client_id=client.id)
+        return queryset.filter(compte_id__in=[courant.id, credit.id])
+
+
+class TransactionCompteCourant(generics.ListAPIView):
+    serializer_class = serializers.TransactionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated,)
+    """
+            GET Method
+            Route : client/transaction/courant
+    """
+    def get_queryset(self):
+        queryset = Transaction.objects.all()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        courant = Courant.objects.get(client_id=client.id)
+        return queryset.filter(compte_id__in=[courant.id])
+
+
+class TransactionCompteCredit(generics.ListAPIView):
+    serializer_class = serializers.TransactionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAuthenticated,)
+    """
+            GET Method
+            Route : client/transaction/credit
+    """
+    def get_queryset(self):
+        queryset = Transaction.objects.all()
+        user = self.request.user
+        info = InfoAuthentification.objects.get(username=user.username)
+        client = Client.objects.get(info_authentification=info)
+        credit = Credit.objects.get(client_id=client.id)
+        return queryset.filter(compte_id__in=[credit.id])

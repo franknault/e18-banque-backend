@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from rest_framework import serializers
 from api.models import *
 
@@ -38,7 +39,7 @@ class ClientsAdresseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Adresse
-        fields = ('adresses',  )
+        fields = ('adresses',)
 
 
 class ClientCourantSerializer(serializers.ModelSerializer):
@@ -47,10 +48,24 @@ class ClientCourantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ClientEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InfoAuthentification
+        fields = ('email',)
+
+
+class ClientCarteCreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarteCredit
+        fields = '__all__'
+
+
 class ClientCreditSerializer(serializers.ModelSerializer):
+    carte_credit = ClientCarteCreditSerializer()
+
     class Meta:
         model = Credit
-        fields = '__all__'
+        fields = ('num_compte', 'solde', 'date_ouverture', 'date_fermeture', 'limite', 'carte_credit')
 
 
 class ClientCompteSerializer(serializers.ModelSerializer):
