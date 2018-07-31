@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import *
 from . import serializers
 from api.models import *
 from django_filters import rest_framework as filters
@@ -177,6 +177,7 @@ class ClientProfile(generics.RetrieveAPIView):
     def get_object(self):
         queryset = Client.objects.filter()
         user = self.request.user
+        print(user.username)
         info = InfoAuthentification.objects.get(username=user.username)
         return queryset.get(info_authentification=info)
 
@@ -206,7 +207,7 @@ class ClientCompteCredit(generics.RetrieveAPIView):
 
     """
         GET Method
-        Route : client/compte
+        Route : client/compte/credit
     """
 
     def get_object(self):
@@ -225,7 +226,7 @@ class ClientCompteCourant(generics.RetrieveAPIView):
 
     """
         GET Method
-        Route : client/compte
+        Route : client/compte/courant
     """
 
     def get_object(self):
