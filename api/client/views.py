@@ -191,7 +191,7 @@ class ClientCompteCredit(generics.RetrieveAPIView):
 
     """
         GET Method
-        Route : client/compte
+        Route : client/compte/credit
     """
     def get_object(self):
         queryset = Credit.objects.filter()
@@ -209,7 +209,7 @@ class ClientCompteCourant(generics.RetrieveAPIView):
 
     """
         GET Method
-        Route : client/compte
+        Route : client/compte/courant
     """
     def get_object(self):
         queryset = Courant.objects.filter()
