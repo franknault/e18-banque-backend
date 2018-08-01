@@ -51,6 +51,10 @@ class ClientIdEmail(generics.RetrieveAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (IsAdminUser,)
 
+    """
+    GET Methode
+    Route : admin/client/username
+    """
     def get_object(self):
         queryset = InfoAuthentification.objects.filter()
         username = self.kwargs['username']
