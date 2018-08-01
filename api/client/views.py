@@ -155,6 +155,14 @@ class ClientsApi(generics.ListCreateAPIView):
                                        date_naissance=request.data['date_naissance'], info_authentification=info)
         client.save()
 
+        adresse = Adresse.objects.create(no_civique=request.data['no_civique'],
+                                         nom_rue=request.data['nom_rue'],
+                                         code_postal=request.data['code_postal'],
+                                         ville=request.data['ville'],
+                                         pays=request.data['pays'],
+                                         client=client)
+        adresse.save()
+
         return Response({"Message": "L'utilisateur a été créé"}, status.HTTP_201_CREATED)
 
 
