@@ -46,6 +46,19 @@ class ClientId(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
+class ClientIdEmail(generics.RetrieveAPIView):
+    serializer_class = serializers.ClientEmailSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    permission_classes = (IsAdminUser,)
+
+    def get_object(self):
+        queryset = InfoAuthentification.objects.filter()
+        username = self.kwargs['username']
+        info = InfoAuthentification.objects.get(username=username)
+        client = Client.objects.get(info_authentification=info)
+        return queryset.get(id=client.info_authentification_id)
+
+
 class ClientIdAdresses(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
     """API de gestion d'adresses pour un client"""
     serializer_class = serializers.ClientsAdresseSerializer
