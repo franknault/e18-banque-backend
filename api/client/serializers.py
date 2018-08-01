@@ -23,6 +23,12 @@ class ClientSerializerNom(serializers.ModelSerializer):
     email = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
     info_authentification = serializers.CharField(allow_null=True)
 
+    no_civique = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
+    nom_rue = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
+    code_postal = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
+    ville = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
+    pays = serializers.CharField(min_length=1, max_length=50, allow_null=True, allow_blank=True)
+
     class Meta:
         model = Client
         fields = '__all__'
