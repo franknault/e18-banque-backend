@@ -12,6 +12,7 @@ urlpatterns = [
     path('rest-auth/', include('rest_auth.urls')),
     path('admin/client', views.ClientsApi.as_view()),
     path('admin/client/<int:pk>', views.ClientId.as_view()),
+    path('admin/client/<username>', views.ClientIdEmail.as_view()),
     path('admin/client/<int:pk>/adresse', views.ClientIdAdresses.as_view()),
     path('admin/client/<int:pk>/compte', views.ClientIdCompte.as_view()),
     path('admin/client/<int:pk>/compte/<int:pk_compte>', views.ClientIdCompteId.as_view()),
